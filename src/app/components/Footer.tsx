@@ -23,12 +23,12 @@ export default function Footer() {
           <div className='md:col-span-2'>
             <h3 className='font-semibold text-lg'>Enlaces útiles</h3>
             <ul className='text-gray-600 grid md:grid-cols-2 space-y-2 mt-4'>
-              <li><Link href={"/rifas"}>Términos y condiciones</Link></li>
-              <li><Link href={"/ganadores"}>Política de privacidad</Link></li>
-              <li><Link href={"/signup"}>Aviso Legal</Link></li>
-              <li><Link href={"/signup"}>Política de cookies</Link></li>
-              <li><Link href={"/signup"}>Política de devolución y reembolsos</Link></li>
-              <li><Link href={"/signup"}>Juego responsable</Link></li>
+              <li><Link href={"/terms"}>Términos y condiciones</Link></li>
+              <li><Link href={"/privacy"}>Política de privacidad</Link></li>
+              <li><Link href={"/legal"}>Aviso Legal</Link></li>
+              <li><Link href={"/cookies"}>Política de cookies</Link></li>
+              <li><Link href={"/refund"}>Política de devolución y reembolsos</Link></li>
+              <li><Link href={"/responsible"}>Juego responsable</Link></li>
             </ul>
           </div>
         </div>

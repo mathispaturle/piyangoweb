@@ -9,9 +9,20 @@ import { Menu } from 'lucide-react';
 
 export default function Header() {
 
+  const showBanner = true;
+
   const [open, setOpen] = useState(false);
 
   return (
+    <>
+      {
+        showBanner && (
+          <div className="bg-black text-white p-2 font-semibold text-center text-sm">
+            Nuevos sorteos cada semana! <Link href={"/signup"} className="underline">Únete a Piyango</Link>
+          </div>
+        )
+      }
+
     <div className='w-full bg-white border-b border-gray-200 top-0 sticky z-20'>
       <div className='max-w-screen-xl mx-auto px-4 py-2 md:py-4 flex justify-between items-center md:grid md:grid-cols-3 gap-4'>
         <div className='hidden md:flex justify-start items-center gap-4 text-sm font-medium'>
@@ -69,5 +80,6 @@ export default function Header() {
         }
       </div>
     </div>
+    </>
   )
 }
