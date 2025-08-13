@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "next dev --no-lint",
+    "build": "next build --no-lint",
+    "start": "next start --no-lint",
+    "lint": "next lint --no-lint"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.1.7",

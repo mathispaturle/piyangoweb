@@ -11,6 +11,8 @@ import Image from "next/image";
 import moment from 'moment';
 import { Megaphone } from 'lucide-react';
 
+type ProductCharacteristics = Record<string, string>;
+
 type Raffle = {
   id: string;
   title: string;
@@ -139,7 +141,7 @@ export default function Raffle() {
               Object.entries(raffle.product_characteristics).map(([key, value], index) => (
                 <div key={index} className="flex justify-start">
                   <span className="font-medium w-32">{key}</span>
-                  <span className="text-gray-600">{value}</span>
+                  <span className="text-gray-600">{String(value)}</span>
                 </div>
               ))}
           </div>

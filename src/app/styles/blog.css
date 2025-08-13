@@ -1,4 +1,4 @@
-section {
+/* section {
   @apply py-24;
 }
 
@@ -23,15 +23,14 @@ section {
   line-height: 1.2;
 }
 
-/* pseudoelementos con CSS puro */
 .blog-details ul li::before {
   content: '';
   position: absolute;
-  width: 0.25rem; /* w-1 */
-  height: 0.25rem; /* h-1 */
-  border-radius: 9999px; /* rounded-full */
-  background-color: #000; /* bg-dark */
-  top: 0.5rem; /* top-2 */
+  width: 0.25rem; 
+  height: 0.25rem; 
+  border-radius: 9999px; 
+  background-color: #000; 
+  top: 0.5rem; 
   left: 0;
 }
 
@@ -69,4 +68,4 @@ section {
 
 .blog-details p {
   @apply text-dark dark:text-white text-sm leading-[1.2];
-}
+} */
