@@ -51,7 +51,7 @@ export default function Referral() {
             {raffles.length === 0 ? (
               <p className="text-center text-gray-500">Cargando rifas...</p>
             ) : (
-              <div className="grid gap-8 md:grid-cols-3 mt-4">
+                <div className="grid gap-8 md:grid-cols-3 items-center mt-4">
                 {raffles.map((raffle: any) => (
                   <RaffleCard
                     key={raffle.id}

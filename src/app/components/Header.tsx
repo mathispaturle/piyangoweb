@@ -50,15 +50,15 @@ export default function Header() {
             Ganadores
           </Link>
         </div>
-        <div>
-          <Image
-            src="/logo.svg"
-            alt="Pyango Logo"
-            width={150}
-            height={50}
-            className="mx-auto"
-          />
-        </div>
+          <Link href={"/"} className='flex items-center gap-2 relative'>
+            <Image
+              src="/logo.svg"
+              alt="Pyango Logo"
+              width={150}
+              height={50}
+              className="mx-auto"
+            />
+          </Link>
 
           {
             user ?

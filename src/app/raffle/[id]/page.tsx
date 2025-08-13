@@ -9,6 +9,7 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import Image from "next/image";
 import moment from 'moment';
+import { Megaphone } from 'lucide-react';
 
 type Raffle = {
   id: string;
@@ -17,6 +18,12 @@ type Raffle = {
   draw_date?: any;
   imageUrl?: string;
   product_characteristics?: Object[]
+  category?: string;
+  sponsor_image?: string;
+  sponsor_name?: string;
+  sponsor_description?: string;
+  sponsor_store_direction?: string;
+  price_ticket?: number;
 };
 
 export default function Raffle() {
@@ -88,39 +95,64 @@ export default function Raffle() {
   return (
     <>
       <Header />
-      <div className="bg-black text-white p-2 font-semibold text-center text-sm">
+      {/* <div className="bg-black text-white p-2 font-semibold text-center text-sm">
         El sorteo acaba en {timeLeft}
-      </div>
-      <div className="py-12 max-w-screen-xl mx-auto px-4 flex justify-between items-start gap-16">
-        <div className="h-auto w-full flex flex-col gap-4">
-          <div className="w-full h-[500px] relative bg-gray-100 rounded-2xl">
+      </div> */}
+      <div className="py-12 max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row justify-between items-start gap-16">
+        <div className="h-auto w-full flex flex-col">
+          <div className="w-full h-[500px] relative bg-gray-100 rounded-2xl overflow-hidden">
             <img
               src={raffle.imageUrl || "/raffle.jpg"}
               alt={raffle.title}
-              style={{ objectFit: "contain", objectPosition: "center" }}
+              style={{ objectFit: "cover", objectPosition: "center" }}
               className='h-full w-full'
             />
           </div>
-          <p className="text-lg text-gray-600">{raffle.description}</p>
-          <p className="text-lg text-gray-600">
-            Draw date:{" "}
-            {raffle.draw_date
-              ? raffle.draw_date.toDate().toLocaleString()
-              : "No date set"}
-          </p>
+          <p className="font-semibold text-main mt-4">{raffle.category}</p>
+          <p className="text-3xl text-black font-semibold">{raffle.title}</p>
+          <p className="text-sm text-gray-600">Reference: {raffle.id}</p>
 
-          {/* <div className="space-y-2">
-            {raffle.product_characteristics?.map(({ key, value }, index) => (
-              <div key={index} className="flex justify-between border-b pb-1">
-                <span className="font-medium">{key}</span>
-                <span className="text-gray-600">{value}</span>
-              </div>
-            ))}
-          </div> */}
+
+          <p className="font-semibold mt-8">Descripción</p>
+          <p className="text-lg text-gray-600 mt-2 max-w-2xl">{raffle.description}</p>
+
+          <hr className='my-8' />
+
+          <p className="font-semibold">Rifa patrocinada por</p>
+
+          <div className='mt-4 flex items-center gap-4'>
+            <div className='w-12 h-12 rounded-full overflow-hidden bg-gray-100 text-black flex items-center justify-center'>
+              <Megaphone className='w-6 h-6' />
+            </div>
+            <div>
+              <p className="text-lg text-gray-800 font-semibold">{raffle.sponsor_name}</p>
+              <p className="text-sm text-gray-600">{raffle.sponsor_store_direction}</p>
+            </div>
+          </div>
+
+          <hr className='my-8' />
+
+          <p className="font-semibold">Características</p>
+
+          <div className="space-y-2 mt-2">
+            {raffle.product_characteristics &&
+              Object.entries(raffle.product_characteristics).map(([key, value], index) => (
+                <div key={index} className="flex justify-start">
+                  <span className="font-medium w-32">{key}</span>
+                  <span className="text-gray-600">{value}</span>
+                </div>
+              ))}
+          </div>
+
         </div>
-        <div className="w-1/3 min-w-1/3 max-w-1/3 h-96 sticky top-24 p-8 bg-white border border-neutral-200 rounded-xl">
-          <h1 className='text-black font-semibold text-lg'>{raffle.title}</h1>
+        <div className="md:w-1/3 md:min-w-1/3 md:max-w-1/3 fixed bottom-2 left-2 right-2 md:sticky md:top-24 p-4 rounded-xl bg-black text-white flex justify-between md:flex-col items-center md:items-start">
 
+          <div>
+            <p className='text-sm'>Precio por boleto</p>
+            <p className='font-extrabold text-3xl'>€ {raffle.price_ticket?.toFixed(2)}</p>
+          </div>
+
+          <button className='bg-main rounded-lg text-center text-white md:w-full px-4 py-2 md:mt-4 font-semibold text-lg'>Comprar boletos</button>
         </div>
       </div>
       <Footer />

@@ -4,20 +4,26 @@ import Link from 'next/link'
 export default function RaffleCard({raffle}: {raffle: any}) {
 
   return (
+    <Link key={raffle.id} href={`/raffle/${raffle.id}`}>
     <div
-      key={raffle.id}
-      className="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden"
+
+        className="w-full h-60 bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden relative"
     >
       <img
         src={raffle.imageUrl}
         alt={raffle.title}
-        className="w-full h-48 object-cover"
+          className="h-full w-full object-cover object-top"
       />
-      <div className="p-5">
+
+        <div className='absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black/60 via-transparent to-transparent'>
+        </div>
+        <h3 className="absolute bottom-4 left-4 text-xl font-semibold text-white">{raffle.title}</h3>
+        <h3 className="absolute bottom-4 right-4  font-semibold text-sm text-white bg-main px-2 py-1 rounded-full">€ {parseFloat(raffle.price_ticket).toFixed(2)}</h3>
+
+
+      </div>
+      {/* <div className="p-5">
         <h3 className="text-lg font-semibold">{raffle.title}</h3>
-        {/* <p className="text-sm text-gray-500 mb-3">
-                    {raffle.description}
-                  </p> */}
         <div className="flex items-center justify-between text-sm mb-3">
           <span className="font-medium text-pink-600">
             {raffle.price_ticket} €
@@ -26,14 +32,10 @@ export default function RaffleCard({raffle}: {raffle: any}) {
             {raffle.available_tickets} boletos restantes
           </span>
         </div>
-        {/* <div className="flex items-center text-gray-500 text-xs mb-4">
-                    <Clock className="w-4 h-4 mr-1" />
-                    {new Date(raffle.drawDate.seconds * 1000).toLocaleDateString("es-ES")}
-                  </div> */}
         <Link href={`/raffle/${raffle.id}`} className="w-full bg-main text-white py-2 px-4 rounded-lg hover:bg-main transition font-semibold text-sm cursor-pointer">
           Reservar boleto
         </Link>
-      </div>
-    </div>
+      </div> */}
+    </Link >
   )
 }
