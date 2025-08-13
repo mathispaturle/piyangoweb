@@ -17,7 +17,7 @@ export default function Footer() {
               <li><Link href={"/rifas"}>Competiciones abiertas</Link></li>
               <li><Link href={"/winners"}>Ganadores</Link></li>
               <li><Link href={"/signup"}>Abrir cuenta</Link></li>
-              <li><Link href={"/signup"}>Blog</Link></li>
+              <li><Link href={"/blog"}>Blog</Link></li>
             </ul>
           </div>
           <div className='md:col-span-2'>
