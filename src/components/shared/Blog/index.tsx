@@ -1,7 +1,7 @@
 import React from 'react';
 import BlogCard from '@/components/shared/Blog/blogCard';
 import { getAllPosts } from '@/components/utils/markdown';
-import { Icon } from "@iconify/react";
+// import { Icon } from "@iconify/react";
 import Link from 'next/link';
 
 interface Blog {
@@ -34,7 +34,7 @@ const BlogSmall: React.FC = () => {
                 <div className='flex justify-between md:items-end items-start mb-10 md:flex-row flex-col'>
                     <div>
                         <p className="text-dark/75 dark:text-white/75 text-base font-semibold flex gap-2">
-                            <Icon icon="ph:house-simple-fill" className="text-2xl text-primary" aria-label="Home icon" />
+                            {/* <Icon icon="ph:house-simple-fill" className="text-2xl text-primary" aria-label="Home icon" /> */}
                             Blog
                         </p>
                         <h2 className="lg:text-52 text-40 font-medium dark:text-white">

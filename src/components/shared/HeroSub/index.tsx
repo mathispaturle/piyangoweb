@@ -1,5 +1,6 @@
+import { Icon } from 'lucide-react';
 import React, { FC } from "react";
-import { Icon } from "@iconify/react/dist/iconify.js"
+// import { Icon } from "@iconify/react/dist/iconify.js"
 
 interface HeroSubProps {
     title: string;
@@ -14,12 +15,12 @@ const HeroSub: FC<HeroSubProps> = ({ title, description, badge }) => {
             <section className="text-center bg-cover !pt-40 pb-20 relative overflow-x-hidden" >
                 <div className='flex gap-2.5 items-center justify-center'>
                     <span>
-                        <Icon
+                        {/* <Icon
                             icon={'ph:house-simple-fill'}
                             width={20}
                             height={20}
                             className='text-primary'
-                        />
+                        /> */}
                     </span>
                     <p className='text-base font-semibold text-dark/75 dark:text-white/75'>
                         {badge}
