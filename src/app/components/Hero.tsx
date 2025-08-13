@@ -49,10 +49,10 @@ export default function Hero () {
           </div>
         </div>
 
-        <div className='hidden md:block py-8'>
+        <div className='hidden md:block py-8 md:ml-32'>
           <div className='relative w-full h-full aspect-square'>
 
-            <div className='p-6 md:p-32 w-full h-full'>
+            <div className='p-6 md:p-20 w-full h-full'>
               <div className='relative w-full h-full bg-white'>
                 <Image
                   src="/qr_black.svg"

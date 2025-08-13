@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 import Link from 'next/link';
 import Image from 'next/image';
 import { Menu } from 'lucide-react';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import router from 'next/router';
+import { auth } from '../../lib/firebase';
 
 
 export default function Header() {
@@ -12,6 +15,19 @@ export default function Header() {
   const showBanner = true;
 
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+
+  // Detectar si ya hay sesión activa
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      }
+    });
+    return () => unsubscribe();
+  }, [router]);
+
 
   return (
     <>
@@ -44,15 +60,29 @@ export default function Header() {
           />
         </div>
 
-        <div className='hidden md:flex justify-end items-center gap-4 text-sm font-medium'>
-          <Link href={"/login"}>
-            Acceder
-          </Link>
+          {
+            user ?
+              <>
+                {user.email &&
+                  <div className='hidden md:flex justify-end items-center gap-4 text-sm font-medium'>
+                    <span>Hola, {user.email}!</span>
+                  </div>
+                }
+              </>
 
-          <Link href={"/signup"} className='bg-main text-white px-4 py-2 rounded hover:bg-main transition-colors font-semibold'>
-            Abrir cuenta
-          </Link>
-        </div>
+              :
+
+              <div className='hidden md:flex justify-end items-center gap-4 text-sm font-medium'>
+                <Link href={"/login"}>
+                  Acceder
+                </Link>
+
+                <Link href={"/signup"} className='bg-main text-white px-4 py-2 rounded hover:bg-main transition-colors font-semibold'>
+                  Abrir cuenta
+                </Link>
+              </div>
+          }
+
 
         <div className='w-12 h-12 min-w-12 max-w-12 md:hidden flex justify-center items-center ' onClick={() => setOpen(!open)}>
           <Menu />
@@ -68,12 +98,25 @@ export default function Header() {
                 <Link href={"/winners"} className='text-sm font-medium'>
                   Ganadores
                 </Link>
-                <Link href={"/login"} className='text-sm font-medium'>
-                  Acceder
-                </Link>
-                <Link href={"/signup"} className='bg-main text-white px-4 text-sm py-2 rounded hover:bg-main transition-colors font-semibold text-center'>
-                  Abrir cuenta
-                </Link>
+
+                  {
+                    user ?
+
+                      <>
+
+                      </>
+
+                      : <>
+                        <Link href={"/login"} className='text-sm font-medium'>
+                          Acceder
+                        </Link>
+                        <Link href={"/signup"} className='bg-main text-white px-4 text-sm py-2 rounded hover:bg-main transition-colors font-semibold text-center'>
+                          Abrir cuenta
+                        </Link>
+                      </>
+                  }
+
+
               </div>
             </div>
           ) 
