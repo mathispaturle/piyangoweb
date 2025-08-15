@@ -62,13 +62,15 @@ export default function Header() {
 
           {
             user ?
-              <>
-                {user.email &&
-                  <div className='hidden md:flex justify-end items-center gap-4 text-sm font-medium'>
-                    <span>Hola, {user.email}!</span>
-                  </div>
-                }
-              </>
+              <div className='flex justify-end items-center gap-4 text-sm font-medium'>
+                <div className='flex items-end gap-0 flex-col'>
+                  <p className='text-sm text-black font-semibold -mb-0.5'>0,00€</p>
+                  <Link href="/topup" className='text-sm text-main font-medium'>Ingresar</Link>
+                </div>
+                <div className='flex items-center gap-2 h-10 w-10 bg-main rounded-full text-sm text-white font-semibold justify-center cursor-pointer hover:bg-main/90 transition-colors'>
+                  M
+                </div>
+              </div>
 
               :
 

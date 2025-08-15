@@ -7,6 +7,8 @@ import { db } from "@/lib/firebase";
 import { Clock } from "lucide-react";
 import RaffleCard from './RaffleCard';
 
+import Link from 'next/link';
+
 export default function FeaturedRaffles() {
   const [raffles, setRaffles] = useState<any>([]);
 
@@ -29,7 +31,7 @@ export default function FeaturedRaffles() {
 
   return (
     <section className="py-32 bg-gray-50">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-screen-xl mx-auto px-6">
         <h2 className="text-3xl font-bold text-gray-900 mb-3 text-center">
           Nuestros Sorteos Destacados
         </h2>
@@ -51,9 +53,9 @@ export default function FeaturedRaffles() {
         )}
 
         <div className='flex justify-center items-center mt-8'>
-          <button className=" bg-black text-white py-2 px-4 rounded-lg hover:bg-black/90 transition font-semibold text-sm cursor-pointer">
+          <Link href="/competitions" className=" bg-black text-white py-2 px-4 rounded-lg hover:bg-black/90 transition font-semibold text-sm cursor-pointer">
             Ver todos los sorteos
-          </button>
+          </Link>
         </div>
       </div>
     </section>

@@ -11,6 +11,7 @@ import { doc, getDoc } from 'firebase/firestore'
 import Link from 'next/link'
 import { onAuthStateChanged } from 'firebase/auth'
 import Image from 'next/image'
+import { Loader2 } from 'lucide-react'
 
 
 export default function ReferralPage() {
@@ -53,7 +54,7 @@ export default function ReferralPage() {
   if (loading) {
     return (
       <main className="flex items-center justify-center min-h-screen">
-        <p className="text-gray-600">Cargando...</p>
+        <Loader2 className='animate-spin' />
       </main>
     )
   }
