@@ -1,4 +1,3 @@
-// src/app/api/monei/webhook/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { Monei, PaymentStatus } from '@monei-js/node-sdk';
 import { db } from '@/lib/firebase';
@@ -26,18 +25,11 @@ export async function POST(req: NextRequest) {
     }
 
     // @ts-ignore
-    const payment = payload.object; // Payment object from Monei
-
-    // TypeScript safety check
-    if (!payment || typeof payment !== 'object') {
-      throw new Error('Invalid payment object in webhook payload');
-    }
-
+    const payment = payload.object;
     const status = payment.status as PaymentStatus;
     const paymentId = payment.id as string;
     const orderId = payment.orderId || '';
 
-    // Assuming you encode uid in orderId like "topup_{uid}_{ts}"
     const [, uid] = orderId.split('_');
 
     if (!uid) {
@@ -51,6 +43,7 @@ export async function POST(req: NextRequest) {
     if (
       status === PaymentStatus.SUCCEEDED ||
       status === PaymentStatus.AUTHORIZED
+      // || status === PaymentStatus.COMPLETED
     ) {
       await runTransaction(db, async (trx) => {
         const txSnap = await trx.get(txRef);
@@ -68,7 +61,6 @@ export async function POST(req: NextRequest) {
           ? txSnap.data().amountCents
           : payment.amount;
 
-        // update transaction doc
         trx.set(
           txRef,
           {
@@ -85,7 +77,6 @@ export async function POST(req: NextRequest) {
           { merge: true }
         );
 
-        // update user wallet
         trx.set(
           userRef,
           {
@@ -102,7 +93,6 @@ export async function POST(req: NextRequest) {
       status === PaymentStatus.FAILED ||
       status === PaymentStatus.EXPIRED
     ) {
-      // simple set for failed/canceled payments
       await setDoc(
         txRef,
         {
