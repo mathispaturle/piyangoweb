@@ -12,12 +12,37 @@ import {
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
+
+// Disable body parsing so we can read raw body
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+async function getRawBody(req: NextRequest): Promise<string> {
+  const chunks = [];
+  const reader = req.body?.getReader();
+  if (!reader) return '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    if (value) chunks.push(value);
+  }
+
+  const bodyBuffer = Buffer.concat(chunks);
+  return bodyBuffer.toString('utf8');
+}
+
 export async function POST(req: NextRequest) {
-  const rawBody = await req.text(); // raw body for signature
   const signature = req.headers.get('monei-signature') || '';
 
   try {
     const monei = new Monei(process.env.MONEI_API_KEY!);
+
+    const rawBody = await getRawBody(req);
+
     const payload = monei.verifySignature(rawBody, signature);
 
     if (!payload || typeof payload === 'boolean') {
