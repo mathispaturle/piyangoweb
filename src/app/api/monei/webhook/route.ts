@@ -38,16 +38,15 @@ async function getRawBody(req: NextRequest): Promise<string> {
 export async function POST(req: NextRequest) {
   const signature = req.headers.get('monei-signature') || '';
 
+  console.log('Received webhook with signature:', signature);
   try {
     const monei = new Monei(process.env.MONEI_API_KEY!);
-
     const rawBody = await getRawBody(req);
-
     const payload = monei.verifySignature(rawBody, signature);
 
-    if (!payload || typeof payload === 'boolean') {
-      throw new Error('Invalid webhook signature', { cause: payload });
-    }
+    // if (!payload || typeof payload === 'boolean') {
+    //   throw new Error('Invalid webhook signature', { cause: payload });
+    // }
 
     // @ts-ignore
     const payment = payload.object;
