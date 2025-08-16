@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     const payload = monei.verifySignature(rawBody, signature);
 
     if (!payload || typeof payload === 'boolean') {
-      throw new Error('Invalid webhook signature');
+      throw new Error('Invalid webhook signature', { cause: payload });
     }
 
     // @ts-ignore
