@@ -30,10 +30,13 @@ export async function POST(req: NextRequest) {
       currency: 'EUR',
       orderId: orderId,
       description: `Top-up monedero Piyango`,
-      callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/monei/webhook`, 
-      completeUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/topup/processing`, 
+      callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/monei/webhook`,
+      completeUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/topup/processing`,
       cancelUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/topup`,
       customer: { email: undefined },
+      metadata: {
+        uid: uid,
+      },
     });
 
     // Guarda movimiento PENDING con payment.id
