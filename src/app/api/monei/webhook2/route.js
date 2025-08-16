@@ -12,7 +12,6 @@ export const config = {
   },
 };
 
-// Convert ReadableStream to string (for signature validation)
 async function getRawBody(req) {
   const chunks = [];
   const reader = req.body?.getReader();
@@ -31,39 +30,22 @@ async function getRawBody(req) {
 // POST handler
 export async function POST(req) {
   try {
+
     const signature = req.headers.get('monei-signature');
+
     if (!signature) {
       return NextResponse.json({ error: 'Missing signature' }, { status: 400 });
     }
 
     const rawBody = await getRawBody(req);
+    console.log(rawBody);
+    // const payment = monei.verifySignature(rawBody, signature);
+
     const payment = monei.verifySignature(rawBody, signature);
+    console.log(payment);
 
-    console.log(
-      `Webhook received for Payment ID: ${payment.id}, Status: ${payment.status}`
-    );
-
-    switch (payment.status) {
-      case PaymentStatus.SUCCEEDED:
-        console.log(`✅ Payment ${payment.id} succeeded. Fulfilling order...`);
-        // TODO: update DB, send confirmation email, etc.
-        break;
-      case PaymentStatus.FAILED:
-        console.log(`❌ Payment ${payment.id} failed. Notifying customer...`);
-        break;
-      case PaymentStatus.AUTHORIZED:
-        console.log(`🟡 Payment ${payment.id} authorized. Capture if needed.`);
-        break;
-      case PaymentStatus.CANCELED:
-        console.log(`🚫 Payment ${payment.id} was canceled.`);
-        break;
-      default:
-        console.log(
-          `ℹ️ Unhandled payment status: ${payment.status} for Payment ${payment.id}`
-        );
-    }
-
-    return NextResponse.json({ received: true }, { status: 200 });
+    return NextResponse.json({ signature, rawBody }, { status: 200 });
+    
   } catch (error) {
     console.error('Invalid webhook signature or error:', error.message);
     return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
