@@ -3,6 +3,8 @@ import Link from 'next/link'
 
 export default function RaffleCard({raffle}: {raffle: any}) {
 
+  const image = raffle.images != null ? raffle.images[0] : "/placeholder.webp"
+
   return (
     <Link key={raffle.id} href={`/raffle/${raffle.id}`}>
     <div
@@ -10,7 +12,7 @@ export default function RaffleCard({raffle}: {raffle: any}) {
         className="w-full h-60 bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden relative"
     >
       <img
-        src={raffle.imageUrl}
+          src={image}
         alt={raffle.title}
           className="h-full w-full object-cover object-top"
       />

@@ -10,25 +10,13 @@ import Header from "../../components/Header";
 import Image from "next/image";
 import moment from 'moment';
 import { Megaphone } from 'lucide-react';
+import ImageSlider from '../../components/ImageSlider';
 
-type ProductCharacteristics = Record<string, string>;
+import Link from 'next/link';
+import { Raffle } from "@/types/raffle";
 
-type Raffle = {
-  id: string;
-  title: string;
-  description: string;
-  draw_date?: any;
-  imageUrl?: string;
-  product_characteristics?: Object[]
-  category?: string;
-  sponsor_image?: string;
-  sponsor_name?: string;
-  sponsor_description?: string;
-  sponsor_store_direction?: string;
-  price_ticket?: number;
-};
 
-export default function Raffle() {
+export default function RafflePage() {
   const params = useParams();
   const { id } = params as { id?: string | string[] };
 
@@ -102,14 +90,15 @@ export default function Raffle() {
       </div> */}
       <div className="py-12 max-w-screen-xl mx-auto px-4 flex flex-col md:flex-row justify-between items-start gap-16">
         <div className="h-auto w-full flex flex-col">
-          <div className="w-full h-[500px] relative bg-gray-100 rounded-2xl overflow-hidden">
+          <ImageSlider images={raffle.images} />
+          {/* <div className="w-full h-[500px] relative bg-gray-100 rounded-2xl overflow-hidden">
             <img
               src={raffle.imageUrl || "/raffle.jpg"}
               alt={raffle.title}
               style={{ objectFit: "cover", objectPosition: "center" }}
               className='h-full w-full'
             />
-          </div>
+          </div> */}
           <p className="font-semibold text-main mt-4">{raffle.category}</p>
           <p className="text-3xl text-black font-semibold">{raffle.title}</p>
           <p className="text-sm text-gray-600">Reference: {raffle.id}</p>
@@ -139,9 +128,9 @@ export default function Raffle() {
           <div className="space-y-2 mt-2">
             {raffle.product_characteristics &&
               Object.entries(raffle.product_characteristics).map(([key, value], index) => (
-                <div key={index} className="flex justify-start">
+                <div key={index} className="grid grid-cols-4">
                   <span className="font-medium w-32">{key}</span>
-                  <span className="text-gray-600">{String(value)}</span>
+                  <span className="text-gray-600 col-span-3">{String(value)}</span>
                 </div>
               ))}
           </div>
@@ -154,7 +143,7 @@ export default function Raffle() {
             <p className='font-extrabold text-3xl'>€ {raffle.price_ticket?.toFixed(2)}</p>
           </div>
 
-          <button className='bg-main rounded-lg text-center text-white md:w-full px-4 py-2 md:mt-4 font-semibold text-lg'>Comprar boletos</button>
+          <Link href={`/raffle/${raffle.id}/buy`} className='bg-main rounded-lg text-center text-white md:w-full px-4 py-2 md:mt-4 font-semibold text-lg'>Reservar boletos</Link>
         </div>
       </div>
       <Footer />

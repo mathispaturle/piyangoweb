@@ -1,33 +1,32 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import Link from 'next/link';
 import Image from 'next/image';
 import { Menu } from 'lucide-react';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import router from 'next/router';
-import { auth } from '../../lib/firebase';
+import useAuthUser from '../../lib/auth/useUserAuth';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
+import { useRouter } from 'next/navigation';
+import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar';
+import { profile } from 'console';
 
 export default function Header() {
 
   const showBanner = true;
 
   const [open, setOpen] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
 
-
-  // Detectar si ya hay sesión activa
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-      }
-    });
-    return () => unsubscribe();
-  }, [router]);
-
+  const { user, userData, loading } = useAuthUser();
+  const router = useRouter();
 
   return (
     <>
@@ -64,12 +63,34 @@ export default function Header() {
             user ?
               <div className='flex justify-end items-center gap-4 text-sm font-medium'>
                 <div className='flex items-end gap-0 flex-col'>
-                  <p className='text-sm text-black font-semibold -mb-0.5'>0,00€</p>
-                  <Link href="/topup" className='text-sm text-main font-medium'>Ingresar</Link>
+                  <p className='text-xs text-black font-semibold -mb-0.5'>{((userData?.wallet?.balanceCents ?? 0) / 100).toFixed(2)}€</p>
+                  <Link href="/topup" className='text-xs text-main font-medium'>Ingresar</Link>
                 </div>
-                <div className='flex items-center gap-2 h-10 w-10 bg-main rounded-full text-sm text-white font-semibold justify-center cursor-pointer hover:bg-main/90 transition-colors'>
-                  M
-                </div>
+
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger className='relative outline-0 '>
+                    <div className='h-12 w-12 max-w-12 max-h-12 relative rounded-full overflow-hidden'>
+                      <Avatar className="h-full w-full relative">
+                        <AvatarImage src={userData?.profile_pic || ""} />
+                        <AvatarFallback>
+                          {userData?.fullname ? userData.fullname.charAt(0) : userData?.email?.charAt(0) || "?"}
+                        </AvatarFallback>
+                      </Avatar>
+                    </div>
+
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className='min-w-48'>
+                    <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => { router.push("/profile") }}>Perfil</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => { router.push("/payments") }}>Pagos</DropdownMenuItem>
+                    {/* <DropdownMenuItem>Ajustes</DropdownMenuItem> */}
+
+                    {/* <Fragment >
+                    </Fragment> */}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
 
               :
