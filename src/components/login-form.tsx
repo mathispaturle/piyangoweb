@@ -41,7 +41,7 @@ export function LoginForm({
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("/dashboard"); // o donde quieras enviarlo tras login
+      router.push("/"); // o donde quieras enviarlo tras login
     } catch (err: any) {
       setError("Credenciales incorrectas o error en el inicio de sesión");
     } finally {
