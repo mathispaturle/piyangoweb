@@ -16,8 +16,9 @@ interface WalletTransaction {
   amount: number
   currency: string
   status: string
-  createdAt: any // Firebase Timestamp
+  createdAt: any 
   type: string
+  raffleId?: string
   paymentId?: string
 }
 
@@ -84,7 +85,7 @@ export default function WalletTransactions() {
                     <TableRow key={tx.id}>
                       <TableCell>{moment(tx.createdAt.seconds).format("LLL")}</TableCell>
                       <TableCell>{tx.type}</TableCell>
-                      <TableCell>{tx.paymentId || "-"}</TableCell>
+                      <TableCell>{tx.paymentId || tx.raffleId || "-"}</TableCell>
                       <TableCell className='text-right'>
                         {(tx.amount/100).toFixed(2)}€
                       </TableCell>
