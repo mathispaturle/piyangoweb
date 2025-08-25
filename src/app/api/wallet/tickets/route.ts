@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserTickets } from '@/lib/monei/utils';
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
   // CORS headers
   const headers = {
     'Access-Control-Allow-Origin': '*', // or your Expo app domain

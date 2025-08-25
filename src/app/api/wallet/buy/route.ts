@@ -5,7 +5,7 @@ import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 import {chargeWalletForTicket} from '@/lib/monei/utils';
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
     const { uid, raffleId, ticketAmount } = await req.json();
 
@@ -21,8 +21,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       { success: true, message: 'Transacción exitosa', response },
       { status: 200 }
-    );  
-
+    );
   } catch (e: any) {
     return NextResponse.json(
       { error: 'No se pudo crear el pago', details: e.message || e.toString() },
