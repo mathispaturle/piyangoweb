@@ -5,7 +5,7 @@ export async function GET(req: NextRequest) {
   // CORS headers
   const headers = {
     'Access-Control-Allow-Origin': '*', // or your Expo app domain
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Content-Type': 'application/json',
   };
@@ -16,7 +16,9 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const { uid } = await req.json();
+    // Get uid from query parameters
+    const url = new URL(req.url);
+    const uid = url.searchParams.get('uid');
 
     if (!uid) {
       return new Response(JSON.stringify({ error: 'Missing uid' }), {
