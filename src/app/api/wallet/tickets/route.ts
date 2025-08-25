@@ -1,11 +1,40 @@
-// src/app/api/wallet/tickets/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserTickets } from '@/lib/monei/utils';
 
 export async function POST(req: NextRequest) {
-  const { uid } = await req.json();
-  if (!uid) return NextResponse.json({ error: 'Missing uid' }, { status: 400 });
+  // CORS headers
+  const headers = {
+    'Access-Control-Allow-Origin': '*', // or your Expo app domain
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Content-Type': 'application/json',
+  };
 
-  const response = await getUserTickets(uid);
-  return NextResponse.json({ response });
+  // Handle preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers });
+  }
+
+  try {
+    const { uid } = await req.json();
+
+    if (!uid) {
+      return new Response(JSON.stringify({ error: 'Missing uid' }), {
+        status: 400,
+        headers,
+      });
+    }
+
+    const tickets = await getUserTickets(uid);
+
+    return new Response(JSON.stringify({ tickets }), { status: 200, headers });
+  } catch (e: any) {
+    return new Response(
+      JSON.stringify({ error: e.message || 'Unknown error' }),
+      {
+        status: 500,
+        headers,
+      }
+    );
+  }
 }
