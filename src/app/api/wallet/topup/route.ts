@@ -3,6 +3,10 @@ import { Monei } from '@monei-js/node-sdk';
 import { db } from '@/lib/firebase';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 
+export const runtime = 'nodejs'; // ensure Node runtime
+
+const monei = new Monei(process.env.MONEI_API_KEY!);
+
 export async function GET(req: NextRequest) {
   const headers = {
     'Access-Control-Allow-Origin': '*', // or your Expo app domain
@@ -16,19 +20,19 @@ export async function GET(req: NextRequest) {
     return new Response(null, { headers });
   }
 
-  try {
-    const { searchParams } = new URL(req.url);
-    const uid = searchParams.get('uid') || '';
-    const amount = parseInt(searchParams.get('amount') || '0', 10);
+  // try {
+  const { searchParams } = new URL(req.url);
+  const uid = searchParams.get('uid') || '';
+  const amount = parseInt(searchParams.get('amount') || '0', 10);
 
-    return await handlePayment(uid, amount);
-  } catch (e: any) {
-    console.error(e);
-    return NextResponse.json(
-      { error: 'No se pudo procesar GET' },
-      { status: 500 }
-    );
-  }
+  return await handlePayment(uid, amount);
+  // } catch (e: any) {
+  //   console.error(e);
+  //   return NextResponse.json(
+  //     { error: 'No se pudo procesar GET' },
+  //     { status: 500 }
+  //   );
+  // }
 }
 
 async function handlePayment(uid: string, amount: number) {
@@ -39,23 +43,20 @@ async function handlePayment(uid: string, amount: number) {
     );
   }
 
-  const apiKey = process.env.MONEI_API_KEY!;
-  const monei = new Monei(apiKey);
-
   const orderId = `t_${shortHash(uid)}_${Date.now()}`;
-  console.log('Order ID:', orderId);
 
-  const payment = await monei.payments.create({
-    amount, // céntimos
+  const args = {
+    amount,
     currency: 'EUR',
     orderId,
     description: `Top-up monedero Piyango`,
-    callbackUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/api/monei/webhook`,
     completeUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/topup/processing`,
     cancelUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/topup`,
-    customer: { email: undefined },
     metadata: { uid },
-  });
+  };
+
+
+  const payment = await monei.payments.create(args);
 
   const txRef = doc(db, `users/${uid}/walletTransactions/${payment.id}`);
   await setDoc(txRef, {
@@ -67,7 +68,10 @@ async function handlePayment(uid: string, amount: number) {
     idempotencyKey: payment.id,
   });
 
-  return NextResponse.json({ redirectUrl: payment.nextAction?.redirectUrl });
+  return NextResponse.json({
+    args,
+    redirectUrl: payment.nextAction?.redirectUrl,
+  });
 }
 
 function shortHash(input: string) {

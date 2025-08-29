@@ -58,12 +58,10 @@ export default function CreateRaffleForm() {
       ),
     }
 
-    console.log('New raffle:', raffle)
 
     // TODO: send raffle to Firestore
     try {
       const docRef = await addDoc(collection(db, "raffles"), raffle)
-      console.log("Raffle created with ID:", docRef.id)
       alert("Raffle created successfully!")
       // opcional: redirigir a otra página
       // router.push("/admin/raffles")

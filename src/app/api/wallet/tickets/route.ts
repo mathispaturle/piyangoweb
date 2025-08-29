@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserTickets } from '@/lib/monei/utils';
 
+export const runtime = 'nodejs'; // ensure Node runtime
+
 export async function GET(req: NextRequest) {
   // CORS headers
   const headers = {

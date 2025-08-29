@@ -58,14 +58,14 @@ export default function TopupPage(){
   const handleTopup = async () => {
     try {
       setLoading(true);
-      const res = await fetch("/api/wallet/topup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ uid, amount: topup * 100 }),
+
+      const url = "/api/wallet/topup" + (uid ? `?uid=${uid}&amount=${topup * 100}` : '');
+
+      const res = await fetch(url, {
+        method: "GET",
       });
       const data = await res.json();
 
-      console.log("Topup response:", data);
 
       if (data.redirectUrl) {
         window.location.href = data.redirectUrl; // MONEI Hosted Page
