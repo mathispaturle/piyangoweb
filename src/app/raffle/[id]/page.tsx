@@ -143,7 +143,7 @@ export default function RafflePage() {
             <p className='font-extrabold text-3xl'>€ {raffle.price_ticket?.toFixed(2)}</p>
           </div>
 
-          <Link href={`/raffle/${raffle.id}/buy`} className='bg-main rounded-lg text-center text-white md:w-full px-4 py-2 md:mt-4 font-semibold text-lg'>Reservar boletos</Link>
+          <Link href={`/`} className='bg-main rounded-lg text-center text-white md:w-full px-4 py-2 md:mt-4 font-semibold text-lg'>Reservar boletos en la app</Link>
         </div>
       </div>
       <Footer />

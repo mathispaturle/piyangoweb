@@ -64,7 +64,7 @@ export default function Header() {
               <div className='flex justify-end items-center gap-4 text-sm font-medium'>
                 <div className='flex items-end gap-0 flex-col'>
                   <p className='text-xs text-black font-semibold -mb-0.5'>{((userData?.wallet?.balanceCents ?? 0) / 100).toFixed(2)}€</p>
-                  <Link href="/topup" className='text-xs text-main font-medium'>Ingresar</Link>
+                  {/* <Link href="/topup" className='text-xs text-main font-medium'>Ingresar</Link> */}
                 </div>
 
 

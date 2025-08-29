@@ -3,20 +3,19 @@ import { Monei } from '@monei-js/node-sdk';
 import { db } from '@/lib/firebase';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 
-export async function POST(req: NextRequest) {
-  try {
-    const { uid, amount } = await req.json();
-    return await handlePayment(uid, amount);
-  } catch (e: any) {
-    console.error(e);
-    return NextResponse.json(
-      { error: 'No se pudo procesar POST' },
-      { status: 500 }
-    );
-  }
-}
-
 export async function GET(req: NextRequest) {
+  const headers = {
+    'Access-Control-Allow-Origin': '*', // or your Expo app domain
+    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Content-Type': 'application/json',
+  };
+
+  // Handle preflight OPTIONS request
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers });
+  }
+
   try {
     const { searchParams } = new URL(req.url);
     const uid = searchParams.get('uid') || '';
