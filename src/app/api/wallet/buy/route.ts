@@ -28,29 +28,57 @@ export async function GET(req: NextRequest) {
       !Number.isInteger(ticketAmount) ||
       ticketAmount <= 0
     ) {
-      return new Response(JSON.stringify({ error: 'Invalid parameters' }), {
-        status: 400,
-        headers,
-      });
+      return new NextResponse(
+        JSON.stringify({ success: false, error: 'Invalid parameters' }),
+        { status: 400, headers }
+      );
     }
 
-    const response = await chargeWalletForTicket(uid, raffleId, ticketAmount);
+    // Call business logic
+    const result = await chargeWalletForTicket(uid, raffleId, ticketAmount);
 
+    // If insufficient funds
+    if (!result.success && result.reason === 'INSUFFICIENT_FUNDS') {
+      return new NextResponse(
+        JSON.stringify({
+          success: false,
+          reason: 'INSUFFICIENT_FUNDS',
+          message: 'Not enough balance to buy tickets',
+        }),
+        { status: 200, headers }
+      );
+    }
+
+    // If any other handled business failure
+    if (!result.success) {
+      return new NextResponse(
+        JSON.stringify({
+          success: false,
+          reason: result.reason || 'UNKNOWN',
+          message:
+            'message' in result && typeof (result as any).message === 'string'
+              ? (result as any).message
+              : 'Transaction failed',
+        }),
+        { status: 200, headers }
+      );
+    }
+
+    // Success
     return new NextResponse(
       JSON.stringify({
         success: true,
         message: 'Transaction successful',
-        response,
+        response: result,
       }),
-      {
-        status: 200,
-        headers,
-      }
+      { status: 200, headers }
     );
   } catch (e: any) {
+    console.error('Buy endpoint error:', e);
     return new NextResponse(
       JSON.stringify({
-        error: 'Could not create payment',
+        success: false,
+        error: 'SERVER_ERROR',
         details: e.message || 'Unknown error',
       }),
       { status: 500, headers }
