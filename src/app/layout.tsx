@@ -12,15 +12,15 @@ export const metadata: Metadata = {
   title: "Piyango - Sube el nivel de tus sorteos",
   description: "Piyango es la nueva forma de participar en sorteos únicos organizados por marcas y tiendas seleccionadas. Intuitivo, transparente y divertido.",
   keywords: ["Piyango", "sorteos", "rifas", "premios", "marketplace", "experiencias", "tiendas", "startup española"],
-  authors: [{ name: "RIFFY SOLUTIONS S.L.", url: "https://piyango.es" }],
+  authors: [{ name: "RIFFY SOLUTIONS S.L.", url: "https://www.piyango.es" }],
   openGraph: {
     title: "Piyango - La nueva generación de sorteos",
     description: "Participa en rifas exclusivas organizadas por marcas y tiendas. Una experiencia innovadora, segura y transparente.",
-    url: "https://piyango.es",
+    url: "https://www.piyango.es",
     siteName: "Piyango",
     images: [
       {
-        url: "https://piyango.es/og-image.jpg", // asegúrate de tener una imagen válida
+        url: "https://www.piyango.es/og-image.jpg", // asegúrate de tener una imagen válida
         width: 1200,
         height: 630,
         alt: "Piyango - Sorteos únicos con tu tienda favorita",
@@ -33,10 +33,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Piyango",
     description: "Participa en sorteos increíbles de forma fácil, segura y divertida.",
-    images: ["https://piyango.es/twitter-card.jpg"], // también válida para redes
+    images: ["https://www.piyango.es/twitter-card.jpg"], // también válida para redes
     creator: "@piyango_es", // si tienes cuenta
   },
-  metadataBase: new URL("https://piyango.es"),
+  metadataBase: new URL("https://www.piyango.es"),
   themeColor: "#ffffff",
 };
 

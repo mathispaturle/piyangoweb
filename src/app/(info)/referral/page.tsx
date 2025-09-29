@@ -77,7 +77,7 @@ export default function ReferralPage() {
               </a>
             </p>
 
-          
+
 
             {!referralCode && (
               <div className="mt-8">
@@ -94,7 +94,7 @@ export default function ReferralPage() {
               <>
                 <div className="border border-gray-300 rounded-md py-3 px-5 mt-8 shadow-lg flex justify-between items-center">
                   <p className="text-gray-600">
-                    {`https://piyango.es/register?r=${referralCode}`}
+                    {`https://www.piyango.es/register?r=${referralCode}`}
                   </p>
                   <Clipboard refer_code={referralCode} />
                 </div>
@@ -104,12 +104,12 @@ export default function ReferralPage() {
           </div>
 
           <div className='relative mt-8 md:mt-0'>
-            <Image 
+            <Image
 
-            src="/referral.svg"
-            alt="Referral Image"
-            width={500} 
-            height={500}
+              src="/referral.svg"
+              alt="Referral Image"
+              width={500}
+              height={500}
             />
           </div>
         </div>
