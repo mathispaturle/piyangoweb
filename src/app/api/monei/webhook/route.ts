@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
   const rawBody = await getRawBody(req);
   console.log(rawBody);
 
-  return NextResponse.json({ ok: true });
+  // return NextResponse.json({ ok: true });
 
   try {
     // const monei = new Monei(process.env.MONEI_API_KEY!);
