@@ -9,20 +9,24 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import Image from "next/image";
 import moment from 'moment';
-import { Megaphone } from 'lucide-react';
+import { Megaphone, Minus, Plus } from 'lucide-react';
 import ImageSlider from '../../components/ImageSlider';
+import useAuthUser from '@/lib/auth/useUserAuth';
 
 import Link from 'next/link';
 import { Raffle } from "@/types/raffle";
+import axios from "axios";
 
 
 export default function RafflePage() {
   const params = useParams();
   const { id } = params as { id?: string | string[] };
+  const { user, userData, loading } = useAuthUser();
 
   const [raffle, setRaffle] = useState<Raffle | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loadingRaffle, setLoadingRaffle] = useState(true);
   const [timeLeft, setTimeLeft] = useState<string>("");
+  const [ballotsNum, setBallotsNum] = useState<number>(0);
 
   useEffect(() => {
     if (!id || Array.isArray(id)) return; // ensure we have a single string id
@@ -40,7 +44,7 @@ export default function RafflePage() {
       } catch (error) {
         console.error("Error fetching raffle:", error);
       } finally {
-        setLoading(false);
+        setLoadingRaffle(false);
       }
     };
 
@@ -48,6 +52,11 @@ export default function RafflePage() {
   }, [id]);
 
   useEffect(() => {
+
+    if ((raffle?.total_tickets ?? 0) - (raffle?.sold_tickets ?? 0) > 0) {
+      setBallotsNum(1)
+    }
+
     if (!raffle?.draw_date) return;
 
     const endTime = moment(raffle.draw_date.seconds * 1000); // Firebase Timestamp → Moment object
@@ -78,9 +87,48 @@ export default function RafflePage() {
 
     return () => clearInterval(timer);
   }, [raffle?.draw_date]);
-  if (loading) return <p className="text-center py-12">Loading...</p>;
+  if (loadingRaffle) return <p className="text-center py-12">loadingRaffle...</p>;
   if (!raffle) return <p className="text-center py-12">Raffle not found</p>;
 
+  const purchaseTickets = async () => {
+
+    if (!user) {
+      if (typeof window !== 'undefined') {
+
+      }
+      return;
+    }
+
+    try {
+      const res = await axios.get("/api/wallet/buy", {
+        params: {
+          uid: user.uid,
+          raffleId: raffle.id,
+          ticketAmount: ballotsNum,
+        },
+        // Optional: if you need to override CORS (rare when calling internal API)
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+      console.log(res.data)
+
+      if (!res.data.success) {
+        // Display error
+        alert(res.data.message)
+      }
+
+
+      return res.data;
+    } catch (error: any) {
+      console.error("Buy request failed:", error);
+      return {
+        success: false,
+        error: "REQUEST_FAILED",
+        details: error.message,
+      };
+    }
+  }
 
   return (
     <>
@@ -107,20 +155,26 @@ export default function RafflePage() {
           <p className="font-semibold mt-8">Descripción</p>
           <p className="text-lg text-gray-600 mt-2 max-w-2xl">{raffle.description}</p>
 
-          <hr className='my-8' />
 
-          <p className="font-semibold">Rifa patrocinada por</p>
+          {
+            raffle.available != false &&
+            <>
+              <hr className='my-8' />
 
-          <div className='mt-4 flex items-center gap-4'>
-            <div className='w-12 h-12 rounded-full overflow-hidden bg-gray-100 text-black flex items-center justify-center'>
-              <Megaphone className='w-6 h-6' />
-            </div>
-            <div>
-              <p className="text-lg text-gray-800 font-semibold">{raffle.sponsor_name}</p>
-              <p className="text-sm text-gray-600">{raffle.sponsor_store_direction}</p>
-            </div>
-          </div>
 
+              <p className="font-semibold">Rifa patrocinada por</p>
+
+              <div className='mt-4 flex items-center gap-4'>
+                <div className='w-12 h-12 rounded-full overflow-hidden bg-gray-100 text-black flex items-center justify-center'>
+                  <Megaphone className='w-6 h-6' />
+                </div>
+                <div>
+                  <p className="text-lg text-gray-800 font-semibold">{raffle.sponsor_name}</p>
+                  <p className="text-sm text-gray-600">{raffle.sponsor_store_direction}</p>
+                </div>
+              </div>
+            </>
+          }
           <hr className='my-8' />
 
           <p className="font-semibold">Características</p>
@@ -138,12 +192,85 @@ export default function RafflePage() {
         </div>
         <div className="md:w-1/3 md:min-w-1/3 md:max-w-1/3 fixed bottom-2 left-2 right-2 md:sticky md:top-24 p-4 rounded-xl bg-black text-white flex justify-between md:flex-col items-center md:items-start">
 
+
           <div>
             <p className='text-sm'>Precio por boleto</p>
             <p className='font-extrabold text-3xl'>€ {raffle.price_ticket?.toFixed(2)}</p>
           </div>
 
-          <Link href={`/`} className='bg-main rounded-lg text-center text-white md:w-full px-4 py-2 md:mt-4 font-semibold text-lg'>Reservar boletos en la app</Link>
+
+
+
+
+          {
+            raffle.available == false ?
+              <div className='bg-main rounded-lg text-center text-white md:w-full px-4 py-2 md:mt-4 font-semibold text-lg'>Próximamente</div>
+              :
+              <>
+                <div onClick={(e) => {
+                  e.stopPropagation();
+                  console.log("Purchase button")
+
+                  if (ballotsNum == 0) {
+                    return;
+                  }
+
+                  purchaseTickets()
+
+                }} className={`${ballotsNum == 0 ? 'bg-main/40 text-white/40' : 'bg-main text-white'} cursor-pointer flex justify-between items-center gap-2 mt-4 w-fullbg-main rounded-lg text-center md:w-full px-4 py-2 md:mt-4 font-semibold text-lg  disabled:cursor-not-allowed`}>
+                  <button onClick={
+                    (e) => {
+                      e.stopPropagation();
+                      console.log(raffle.total_tickets)
+                      console.log(raffle.sold_tickets)
+                      if (ballotsNum == 0) return;
+                      else {
+                        setBallotsNum(ballotsNum - 1)
+                      }
+                    }
+                  } className="h-8 w-8 bg-white rounded-full flex justify-center items-center text-black">
+                    <Minus />
+                  </button>
+
+                  <p>
+                    Reservar {ballotsNum > 0 && ballotsNum} boletos
+                  </p>
+
+
+                  <button onClick={
+                    (e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      console.log(raffle.total_tickets)
+                      console.log(raffle.sold_tickets)
+                      if (ballotsNum < (raffle.total_tickets - (raffle.sold_tickets ?? 0))) {
+                        var num = ballotsNum + 1;
+                        setBallotsNum(num)
+                      }
+                    }
+                  } className="h-8 w-8 bg-white rounded-full flex justify-center items-center text-black active:scale-95 transition-all duration-200">
+                    <Plus />
+                  </button>
+                </div>
+                <div className="mt-4 pt-4 border-t border-t-white w-full">
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm text-white/70">Número de boletos</p>
+                    <p className="text-sm font-medium">{ballotsNum}</p>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm text-white/70">Precio por boleto</p>
+                    <p className="text-sm font-medium">{(raffle.price_ticket ?? 0)} €</p>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm text-white/70">Total</p>
+                    <p className="text-sm font-medium">{ballotsNum * (raffle.price_ticket ?? 0)} €</p>
+                  </div>
+                </div>
+              </>
+          }
+
         </div>
       </div>
       <Footer />

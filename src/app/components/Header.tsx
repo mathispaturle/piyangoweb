@@ -38,17 +38,21 @@ export default function Header() {
         )
       }
 
-    <div className='w-full bg-white border-b border-gray-200 top-0 sticky z-20'>
-      <div className='max-w-screen-xl mx-auto px-4 py-2 md:py-4 flex justify-between items-center md:grid md:grid-cols-3 gap-4'>
-        <div className='hidden md:flex justify-start items-center gap-4 text-sm font-medium'>
-          <Link href={"/competitions"}>
-            Competiciones abiertas
-          </Link>
+      <div className='w-full bg-white border-b border-gray-200 top-0 sticky z-20'>
+        <div className='max-w-screen-xl mx-auto px-4 py-2 md:py-4 flex justify-between items-center md:grid md:grid-cols-3 gap-4'>
+          <div className='hidden md:flex justify-start items-center gap-4 text-sm font-medium'>
+            <Link href={"/competitions"}>
+              Competiciones abiertas
+            </Link>
 
-          <Link href={"/winners"}>
-            Ganadores
-          </Link>
-        </div>
+            {/* <Link href={"/winners"}>
+              Ganadores
+            </Link> */}
+
+            <Link href={"/tickets"}>
+              Mis boletos
+            </Link>
+          </div>
           <Link href={"/"} className='flex items-center gap-2 relative'>
             <Image
               src="/logo.svg"
@@ -83,6 +87,7 @@ export default function Header() {
                   <DropdownMenuContent align="end" className='min-w-48'>
                     <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    {/* <DropdownMenuItem onClick={() => { router.push("/tickets") }}>Mis tickets</DropdownMenuItem> */}
                     <DropdownMenuItem onClick={() => { router.push("/profile") }}>Perfil</DropdownMenuItem>
                     <DropdownMenuItem onClick={() => { router.push("/payments") }}>Pagos</DropdownMenuItem>
                     {/* <DropdownMenuItem>Ajustes</DropdownMenuItem> */}
@@ -107,20 +112,20 @@ export default function Header() {
           }
 
 
-        <div className='w-12 h-12 min-w-12 max-w-12 md:hidden flex justify-center items-center ' onClick={() => setOpen(!open)}>
-          <Menu />
-        </div>
+          <div className='w-12 h-12 min-w-12 max-w-12 md:hidden flex justify-center items-center ' onClick={() => setOpen(!open)}>
+            <Menu />
+          </div>
 
-        {
-          open && (
-            <div className='absolute top-16 left-0 w-full bg-white border-b border-gray-200 shadow-lg md:hidden'>
-              <div className='flex flex-col gap-2 p-4'>
-                <Link href={"/competitions"} className='text-sm font-medium'>
-                  Competiciones abiertas
-                </Link>
-                <Link href={"/winners"} className='text-sm font-medium'>
-                  Ganadores
-                </Link>
+          {
+            open && (
+              <div className='absolute top-16 left-0 w-full bg-white border-b border-gray-200 shadow-lg md:hidden'>
+                <div className='flex flex-col gap-2 p-4'>
+                  <Link href={"/competitions"} className='text-sm font-medium'>
+                    Competiciones abiertas
+                  </Link>
+                  <Link href={"/winners"} className='text-sm font-medium'>
+                    Ganadores
+                  </Link>
 
                   {
                     user ?
@@ -140,12 +145,12 @@ export default function Header() {
                   }
 
 
+                </div>
               </div>
-            </div>
-          ) 
-        }
+            )
+          }
+        </div>
       </div>
-    </div>
     </>
   )
 }

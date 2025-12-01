@@ -4,15 +4,18 @@ import Image from "next/image";
 import { StaticImageData } from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import LightboxPreview from "@/app/components/product/Lightbox";
+
 // Interface for image data
 interface ImageData {
   src: string;
 }
 
 
-export default function ImageSlider({images}: {images: string[]}): JSX.Element {
+export default function ImageSlider({ images }: { images: string[] }): JSX.Element {
   // State to keep track of the current image index
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [slides, setSlides] = useState<any>([]);
 
   // State to determine if the image is being hovered over
   const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -28,6 +31,20 @@ export default function ImageSlider({images}: {images: string[]}): JSX.Element {
   const nextSlide = (): void => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
+
+  useEffect(() => {
+
+    var s: any = [];
+
+    if (images.length > 0) {
+      images.forEach((image, index) => {
+        s.push({
+          src: image
+        })
+      })
+      setSlides(s)
+    }
+  }, [images])
 
 
   return (
@@ -68,7 +85,10 @@ export default function ImageSlider({images}: {images: string[]}): JSX.Element {
       >
         <ChevronRight className="text-gray-400 group-hover:text-white" />
       </button>
-     
+
+      <div className="flex justify-center mt-4 absolute bottom-2 right-2">
+        <LightboxPreview images={slides} />
+      </div>
     </div>
   );
 }

@@ -23,6 +23,12 @@ export async function GET(req: NextRequest) {
       status: payment.status,
       amount: payment.amount,
       currency: payment.currency,
+      customer: {
+        name: "Mathis Paturle",
+        email: "mathispaturle@gmail.com",
+        phone: "+34662942334"
+      },
+      description: "Topup payment for Piyango"
       // message: payment.message,
     });
   } catch (err: any) {

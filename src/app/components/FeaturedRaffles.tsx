@@ -15,7 +15,7 @@ export default function FeaturedRaffles() {
   useEffect(() => {
     const fetchRaffles = async () => {
       const rafflesRef = collection(db, "raffles");
-      const q = query(rafflesRef, where("featured", "==", true));
+      const q = query(rafflesRef, where("category", "!=", null));
       const querySnapshot = await getDocs(q);
 
       const rafflesData = querySnapshot.docs.map((doc) => ({

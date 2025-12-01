@@ -6,10 +6,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 const images = ["/images/1.jpg", "/images/2.jpg", "/images/3.jpg"];
 
+import { usePWAInstall } from "@/hooks/usePWAInstall";
 
-export default function Hero () {
+export default function Hero() {
 
   const [currentImage, setCurrentImage] = useState(0);
+
+  const { canInstall, triggerInstall } = usePWAInstall();
+
+  // if (!canInstall) return null; // o deja un mensaje sutil
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -20,13 +26,13 @@ export default function Hero () {
 
   return (
     <div className='w-full flex items-stretch justify-stretch relative'>
-      <div className='relative max-w-screen-xl p-4 mx-auto w-full text-white  grid md:grid-cols-2 items-center'>
-        <div className='py-40 md:py-8 items-center'>
-          <h1 className='text-4xl md:text-6xl font-bold '>Rediseñamos la suerte</h1>
-          <p className='text-2xl mt-3'>Participa y gana de manera justa y con más posibilidades que nunca.</p>
+      <div className='relative max-w-screen-xl p-4 py-[24vh] mx-auto w-full text-white  grid md:grid-cols-1 items-center'>
+        <div className='md:py-8 items-center'>
+          <h1 className='text-4xl md:text-7xl font-bold '>Rediseñamos la suerte</h1>
+          <p className='text-3xl mt-3'>Participa y gana de manera justa y con más posibilidades que nunca.</p>
 
           <div className='flex justify-start items-center gap-4 mt-6'>
-            <Link href={"/"} className='relative'>
+            <Link href={"/https://apps.apple.com/us/app/piyango-app/id6751572358"} target="_blank" className='relative'>
               <Image
                 src="/appstore.png"
                 alt="Pyango Logo"
@@ -36,7 +42,7 @@ export default function Hero () {
               />
             </Link>
 
-            <Link href={"/"} className='relative'>
+            {/* <Link href={"/"} className='relative'>
               <Image
                 src="/googleplay.png"
                 alt="Pyango Logo"
@@ -44,12 +50,30 @@ export default function Hero () {
                 height={100}
                 className="mx-auto"
               />
-            </Link>
+            </Link> */}
+
+            {/* {
+              canInstall && */}
+            <button
+              onClick={triggerInstall}
+              className=""
+            >
+              <Image
+                src="/googleplay.png"
+                alt="Pyango Logo"
+                width={170}
+                height={100}
+                className="mx-auto"
+              />
+              {/* Instalar app en Android */}
+            </button>
+            {/* } */}
+
 
           </div>
         </div>
 
-        <div className='hidden md:block py-8 md:ml-32'>
+        <div className='hidden py-8 md:ml-32'>
           <div className='relative w-full h-full aspect-square'>
 
             <div className='p-6 md:p-20 w-full h-full'>
