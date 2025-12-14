@@ -74,10 +74,10 @@ export default function Header() {
 
                 <DropdownMenu>
                   <DropdownMenuTrigger className='relative outline-0 '>
-                    <div className='h-12 w-12 max-w-12 max-h-12 relative rounded-full overflow-hidden'>
-                      <Avatar className="h-full w-full relative">
+                    <div className='h-12 w-12 max-w-12 max-h-12 relative rounded-full overflow-hidden bg-main flex justify-center items-center'>
+                      <Avatar className="h-full w-full relative flex justify-center items-center">
                         <AvatarImage src={userData?.profile_pic || ""} />
-                        <AvatarFallback>
+                        <AvatarFallback className="text-white uppercase font-semibold">
                           {userData?.fullname ? userData.fullname.charAt(0) : userData?.email?.charAt(0) || "?"}
                         </AvatarFallback>
                       </Avatar>

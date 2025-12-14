@@ -54,7 +54,7 @@ export default function Hero() {
 
             {/* {
               canInstall && */}
-            <button
+            {/* <button
               onClick={triggerInstall}
               className=""
             >
@@ -65,8 +65,7 @@ export default function Hero() {
                 height={100}
                 className="mx-auto"
               />
-              {/* Instalar app en Android */}
-            </button>
+            </button> */}
             {/* } */}
 
 

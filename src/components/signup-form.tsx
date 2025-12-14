@@ -13,6 +13,7 @@ import {
 } from "firebase/auth";
 import { doc, setDoc, getDocs, collection, query, where } from "firebase/firestore";
 import { useRouter, useSearchParams } from "next/navigation";
+import axios from "axios";
 
 export function SignupForm({
   className,
@@ -43,7 +44,7 @@ export function SignupForm({
     return () => unsubscribe();
   }, [router]);
 
-  const generateUniqueReferralCode = async (length = 6): Promise<string>  =>{
+  const generateUniqueReferralCode = async (length = 6): Promise<string> => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
     for (let i = 0; i < 5; i++) { // max 5 attempts
@@ -87,6 +88,8 @@ export function SignupForm({
         referredBy: referrer_id,
         referralStats: { invited: 0, completed: 0, rewardCredits: 0 },
       });
+
+      await axios.get("/api/resend/welcome?name=Mathis+Paturle&email=mathispaturle@gmail.com")
 
       router.push("/");
     } catch (err: any) {

@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Clock } from "lucide-react";
 import RaffleCard from './RaffleCard';
@@ -14,16 +14,25 @@ export default function FeaturedRaffles() {
 
   useEffect(() => {
     const fetchRaffles = async () => {
-      const rafflesRef = collection(db, "raffles");
-      const q = query(rafflesRef, where("category", "!=", null));
-      const querySnapshot = await getDocs(q);
+      try {
+        const rafflesRef = collection(db, "raffles");
 
-      const rafflesData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+        const q = query(
+          rafflesRef,
+          orderBy("sortOrder", "asc")
+        );
 
-      setRaffles(rafflesData);
+        const querySnapshot = await getDocs(q);
+
+        const rafflesData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setRaffles(rafflesData);
+      } catch (error) {
+        console.error("Error fetching raffles:", error);
+      }
     };
 
     fetchRaffles();

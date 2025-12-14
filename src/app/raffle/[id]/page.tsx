@@ -9,7 +9,7 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import Image from "next/image";
 import moment from 'moment';
-import { Megaphone, Minus, Plus } from 'lucide-react';
+import { Check, CheckCheck, CheckCircle, Loader, Megaphone, Minus, Plus } from 'lucide-react';
 import ImageSlider from '../../components/ImageSlider';
 import useAuthUser from '@/lib/auth/useUserAuth';
 
@@ -17,6 +17,13 @@ import Link from 'next/link';
 import { Raffle } from "@/types/raffle";
 import axios from "axios";
 
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
+
+import { AlertCircleIcon, CheckCircle2Icon, PopcornIcon } from "lucide-react"
 
 export default function RafflePage() {
   const params = useParams();
@@ -27,6 +34,10 @@ export default function RafflePage() {
   const [loadingRaffle, setLoadingRaffle] = useState(true);
   const [timeLeft, setTimeLeft] = useState<string>("");
   const [ballotsNum, setBallotsNum] = useState<number>(0);
+
+  const [errorReserve, setErrorReserve] = useState<boolean>(false)
+  const [success, setSuccess] = useState<boolean>(false)
+  const [loadingbutton, setLoadingbutton] = useState<boolean>(false)
 
   useEffect(() => {
     if (!id || Array.isArray(id)) return; // ensure we have a single string id
@@ -92,10 +103,14 @@ export default function RafflePage() {
 
   const purchaseTickets = async () => {
 
+    setErrorReserve(false)
+    setLoadingbutton(true)
+
     if (!user) {
       if (typeof window !== 'undefined') {
 
       }
+      setLoadingbutton(false)
       return;
     }
 
@@ -111,13 +126,16 @@ export default function RafflePage() {
           "Content-Type": "application/json",
         }
       });
-      console.log(res.data)
 
       if (!res.data.success) {
         // Display error
-        alert(res.data.message)
+        setErrorReserve(true)
+        setLoadingbutton(false)
+        return
       }
 
+      setSuccess(true)
+      setLoadingbutton(false)
 
       return res.data;
     } catch (error: any) {
@@ -198,10 +216,6 @@ export default function RafflePage() {
             <p className='font-extrabold text-3xl'>€ {raffle.price_ticket?.toFixed(2)}</p>
           </div>
 
-
-
-
-
           {
             raffle.available == false ?
               <div className='bg-main rounded-lg text-center text-white md:w-full px-4 py-2 md:mt-4 font-semibold text-lg'>Próximamente</div>
@@ -232,9 +246,17 @@ export default function RafflePage() {
                     <Minus />
                   </button>
 
-                  <p>
-                    Reservar {ballotsNum > 0 && ballotsNum} boletos
-                  </p>
+                  <div className="flex justify-center items-center gap-3">
+                    <p>
+                      Reservar {ballotsNum > 0 && ballotsNum} boletos
+                    </p>
+                    {
+                      loadingbutton &&
+                      <Loader className="animate-spin" />
+
+                    }
+                  </div>
+
 
 
                   <button onClick={
@@ -255,24 +277,60 @@ export default function RafflePage() {
                 <div className="mt-4 pt-4 border-t border-t-white w-full">
                   <div className="flex justify-between items-center">
                     <p className="text-sm text-white/70">Número de boletos</p>
-                    <p className="text-sm font-medium">{ballotsNum}</p>
+                    <p className="text-sm font-medium">{ballotsNum.toFixed(2)}</p>
                   </div>
 
                   <div className="flex justify-between items-center">
                     <p className="text-sm text-white/70">Precio por boleto</p>
-                    <p className="text-sm font-medium">{(raffle.price_ticket ?? 0)} €</p>
+                    <p className="text-sm font-medium">{(raffle.price_ticket ?? 0).toFixed(2)} €</p>
                   </div>
 
                   <div className="flex justify-between items-center">
                     <p className="text-sm text-white/70">Total</p>
-                    <p className="text-sm font-medium">{ballotsNum * (raffle.price_ticket ?? 0)} €</p>
+                    <p className="text-sm font-medium">{(ballotsNum * (raffle.price_ticket ?? 0)).toFixed(2)} €</p>
                   </div>
                 </div>
+
+                {
+                  errorReserve &&
+                  <Alert variant="destructive" className="mt-4">
+                    <AlertCircleIcon />
+                    <AlertTitle>No ha sido posible reservar el boleto.</AlertTitle>
+                    <AlertDescription>
+                      <p>Por favor asegúrate de tener suficiente saldo para poder reservar el boleto.</p>
+                      <ul className="list-inside list-disc text-sm">
+                        <li>Revisa tu cuenta</li>
+                        <li>Recarga tu monedero virtual</li>
+                        <li>Reserva tu boleto</li>
+                      </ul>
+                    </AlertDescription>
+                  </Alert>
+                }
               </>
           }
 
         </div>
       </div>
+
+      {
+        success &&
+        <>
+          <div className="absolute top-0 bottom-0 right-0 left-0 bg-black/40 z-50 flex justify-center items-center">
+            <div className="w-96 h-auto p-8 bg-white rounded-lg flex justify-center items-center flex-col text-center">
+              <CheckCircle size={64} className="text-main" />
+
+              <p className="mt-8 font-medium text-xl">¡Tu boleto ha sido reservado!</p>
+              <p className="">Accede a tus boletos para consultar los número</p>
+
+              <div className="mt-4">
+                <Link href="/tickets" className="bg-main text-sm text-white px-4 py-2 rounded hover:bg-main transition-colors font-semibold">Mis boletos</Link>
+              </div>
+            </div>
+          </div>
+        </>
+      }
+
+
       <Footer />
     </>
   );

@@ -3,7 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme{
+@theme {
   --main: #13C2AD;
 }
 
@@ -48,6 +48,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
+
 /* 
 body {
   font-family: var(--font-onest);
@@ -126,9 +127,8 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
-
-

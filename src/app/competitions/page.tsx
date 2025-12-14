@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Clock } from "lucide-react"; 
+import { Clock } from "lucide-react";
 
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -17,20 +17,30 @@ export default function Referral() {
 
   useEffect(() => {
     const fetchRaffles = async () => {
-      const rafflesRef = collection(db, "raffles");
-      const querySnapshot = await getDocs(rafflesRef);
+      try {
+        const rafflesRef = collection(db, "raffles");
 
-      const rafflesData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+        const q = query(
+          rafflesRef,
+          orderBy("sortOrder", "asc")
+        );
 
-      setRaffles(rafflesData);
+        const querySnapshot = await getDocs(q);
+
+        const rafflesData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setRaffles(rafflesData);
+      } catch (error) {
+        console.error("Error fetching raffles:", error);
+      }
     };
 
     fetchRaffles();
   }, []);
-  
+
 
 
   return (
@@ -46,12 +56,12 @@ export default function Referral() {
             </h2>
             <p className='mb-12 text-left text-lg text-gray-600'>No pierdas tu oportunidad en adquirir uno o más boletos y ganar grande jugando justo y con más probabilidades de ganar</p>
 
-            <hr/>
+            <hr />
 
             {raffles.length === 0 ? (
               <p className="text-center text-gray-500">Cargando rifas...</p>
             ) : (
-                <div className="grid gap-8 md:grid-cols-3 items-center mt-4">
+              <div className="grid gap-8 md:grid-cols-3 items-center mt-4">
                 {raffles.map((raffle: any) => (
                   <RaffleCard
                     key={raffle.id}

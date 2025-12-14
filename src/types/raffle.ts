@@ -15,4 +15,5 @@ export type Raffle = {
   price_ticket?: number;
   total_tickets: number;
   sold_tickets?: number;
+  sort_order?: number;
 };
