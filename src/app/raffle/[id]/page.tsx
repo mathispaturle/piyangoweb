@@ -174,14 +174,27 @@ export default function RafflePage() {
           <p className="text-lg text-gray-600 mt-2 max-w-2xl">{raffle.description}</p>
 
 
+
           {
             raffle.available != false &&
             <>
               <hr className='my-8' />
 
+              <div className="flex justify-start items-stretch gap-4">
+                <div className="p-4 flex flex-col border border-gray-100 rounded-md bg-white">
+                  <p className="text-sm text-gray-600">Tickets</p>
+                  <p className="text-semibold">{raffle.total_tickets}</p>
+                </div>
+
+                <div className="p-4 flex flex-col border border-gray-100 rounded-md  bg-white">
+                  <p className="text-sm text-gray-600">Tickets restantes</p>
+                  <p className="text-semibold">{raffle.total_tickets - (raffle.sold_tickets ?? 0)}</p>
+                </div>
+              </div>
+
+              <hr className='my-8' />
 
               <p className="font-semibold">Rifa patrocinada por</p>
-
               <div className='mt-4 flex items-center gap-4'>
                 <div className='w-12 h-12 rounded-full overflow-hidden bg-gray-100 text-black flex items-center justify-center'>
                   <Megaphone className='w-6 h-6' />
@@ -200,7 +213,7 @@ export default function RafflePage() {
           <div className="space-y-2 mt-2">
             {raffle.product_characteristics &&
               Object.entries(raffle.product_characteristics).map(([key, value], index) => (
-                <div key={index} className="grid grid-cols-4">
+                <div key={index} className="grid grid-cols-1 md:grid-cols-4">
                   <span className="font-medium w-32">{key}</span>
                   <span className="text-gray-600 col-span-3">{String(value)}</span>
                 </div>
@@ -208,13 +221,27 @@ export default function RafflePage() {
           </div>
 
         </div>
-        <div className="md:w-1/3 md:min-w-1/3 md:max-w-1/3 fixed bottom-2 left-2 right-2 md:sticky md:top-24 p-4 rounded-xl bg-black text-white flex justify-between md:flex-col items-center md:items-start">
+        <div className="w-full md:w-1/3 md:min-w-1/3 md:max-w-1/3 fixed bottom-2 left-2 right-2 md:sticky md:top-24 p-4 rounded-xl bg-black text-white flex flex-col justify-between md:flex-col items-stretch md:items-start">
+
+          <div className="flex justify-between items-center">
+            <div>
+              <p className='text-sm'>Precio por boleto</p>
+              <p className='font-extrabold text-3xl'>€ {raffle.price_ticket?.toFixed(2)}</p>
+            </div>
+            <div className="md:hidden mt-4 w-48">
+              <div className="flex justify-between items-center">
+                <p className="text-sm text-white/70">Número de boletos</p>
+                <p className="text-sm font-medium">{ballotsNum.toFixed(2)}</p>
+              </div>
 
 
-          <div>
-            <p className='text-sm'>Precio por boleto</p>
-            <p className='font-extrabold text-3xl'>€ {raffle.price_ticket?.toFixed(2)}</p>
+              <div className="flex justify-between items-center">
+                <p className="text-sm text-white/70">Total</p>
+                <p className="text-sm font-medium">{(ballotsNum * (raffle.price_ticket ?? 0)).toFixed(2)} €</p>
+              </div>
+            </div>
           </div>
+
 
           {
             raffle.available == false ?
@@ -274,7 +301,7 @@ export default function RafflePage() {
                     <Plus />
                   </button>
                 </div>
-                <div className="mt-4 pt-4 border-t border-t-white w-full">
+                <div className="hidden md:block mt-4 pt-4 border-t border-t-white w-full">
                   <div className="flex justify-between items-center">
                     <p className="text-sm text-white/70">Número de boletos</p>
                     <p className="text-sm font-medium">{ballotsNum.toFixed(2)}</p>

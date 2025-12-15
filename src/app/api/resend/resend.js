@@ -1,6 +1,6 @@
 
 // Templates
-// import { StripeWelcomeEmail, stripe_subject } from './templates/book_paid';
+import { ticketPurchasedSubject, PiyangoTicketPurchasedEmail } from './templates/book_paid';
 // import { notify_host_new_booking_subject, NotifyHostNewBooking } from './templates/notify_host_new_booking';
 // import { booking_confirmed_subject, BookingConfirmed } from './templates/booking_confirmed';
 // import { booking_lead_confirmed_subject, BookingLeadConfirmed } from './templates/booking_lead_confirmation';
@@ -33,18 +33,20 @@ export async function SendMail(url) {
 async function GetEmailData(email_type, url, lang) {
 
     switch (email_type) {
-        // case "booking_paid": {
-        //     const book_id = url.searchParams.get("book_id")
-        //     const user_token = url.searchParams.get("user_token")
+        case "raffle_paid": {
+            // const book_id = url.searchParams.get("book_id")
+            // const user_token = url.searchParams.get("user_token")
 
-        //     let title = await stripe_subject(book_id, lang)
-        //     let email = await StripeWelcomeEmail(book_id, lang, user_token)
 
-        //     return {
-        //         subject: title,
-        //         email: email
-        //     }
-        // }
+
+            let title = ticketPurchasedSubject("raffleTitle")
+            let email = await PiyangoTicketPurchasedEmail()
+
+            return {
+                subject: title,
+                email: email
+            }
+        }
 
         // case "booking_paid_host": {
         //     const book_id = url.searchParams.get("book_id")

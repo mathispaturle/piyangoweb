@@ -89,7 +89,11 @@ export function SignupForm({
         referralStats: { invited: 0, completed: 0, rewardCredits: 0 },
       });
 
-      await axios.get("/api/resend/welcome?name=Mathis+Paturle&email=mathispaturle@gmail.com")
+      await axios.post("/api/resend?email_type=welcome&lang=es&email_to=" + user.email, {
+        "email_type": "welcome",
+        "lang": "es",
+        "email_to": user.email
+      })
 
       router.push("/");
     } catch (err: any) {

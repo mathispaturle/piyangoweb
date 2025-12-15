@@ -17,10 +17,13 @@ export async function GET(req: NextRequest) {
     return new Response(null, { headers });
   }
 
+  const url = new URL(req.url);
+  const uid = url.searchParams.get('uid');
+
+  console.log(uid)
+
   try {
     // Get uid from query parameters
-    const url = new URL(req.url);
-    const uid = url.searchParams.get('uid');
 
     if (!uid) {
       return new Response(JSON.stringify({ error: 'Missing uid' }), {
@@ -30,6 +33,7 @@ export async function GET(req: NextRequest) {
     }
 
     const tickets = await getUserTickets(uid);
+    console.log(tickets)
 
     return new Response(JSON.stringify({ tickets }), { status: 200, headers });
   } catch (e: any) {

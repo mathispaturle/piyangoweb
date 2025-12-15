@@ -32,13 +32,13 @@ export const WelcomeHueco = async (lang) => {
     return (
         <Html>
             <Head />
-            <Preview>Preview text</Preview>
+            <Preview>¡Bienvenido a Piyango!</Preview>
             <Tailwind>
                 <Body style={main}>
                     <Container style={container}>
                         <Section style={box}>
                             <Img
-                                src={`https://www.piyango.es/logo.svg`}
+                                src={`https://www.piyango.es/logo 2.png`}
                                 height="21"
                                 alt="Piyango"
                             />

@@ -30,11 +30,11 @@ export const paragraph = {
 };
 
 export const anchor = {
-    color: "#EC5D4B",
+    color: "#13c2ad",
 };
 
 export const button = {
-    backgroundColor: "#EC5D4B",
+    backgroundColor: "#13c2ad",
     borderRadius: "5px",
     color: "#fff",
     fontSize: "16px",

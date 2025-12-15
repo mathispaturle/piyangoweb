@@ -10,7 +10,7 @@ import {
     Preview,
     Section,
     Text,
-    Tailwind
+    Tailwind,
 } from "@react-email/components";
 import * as React from "react";
 
@@ -22,111 +22,142 @@ import {
     paragraph,
     anchor,
     button,
-    footer
-} from './styles'
+    footer,
+} from "./styles";
 
-import { useTranslation } from "@/app/i18n";
-import GetBookingDetail from '@/app/api/v3/dashboard/universal/get_booking_detail'
 
-export const stripe_subject = async (book_id, lang) => {
-    const { t } = await useTranslation(lang)
-    const title = t('email_book_subject_book_paid').replace("{{value}}", `#${book_id.padStart(5, '0')}`)
-    return title
+import axios from "axios";
+export const ticketPurchasedSubject = (raffleTitle) => {
+    return `🎟️ Confirmación de tus boletos – ${raffleTitle}`;
 };
 
-export const StripeWelcomeEmail = async (book_id, lang, user_token) => {
+export const PiyangoTicketPurchasedEmail = async () => {
 
-    const { t } = await useTranslation(lang)
+    var raffleTitle = "Sortep de bici"
+    var raffleId = "yeuwjdbnd"
+    var tickets = ["00001", "00002", "829"]
+    var totalPrice = 30
 
-    let booking_data = await GetBookingDetail({ booking_id: book_id }, user_token).catch((error) => {
-        console.log(error)
-    });
-    const booking = booking_data.bookings
 
+    const api_url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/wallet/tickets?uid=YsM67FCOWIXpjDMGU7vEUhTYLMY2`;
+    console.log(api_url)
+    const res = await axios.get(api_url);
+    const data = await res.json();
+
+    /**
+     * data example:
+     * {
+     *   tickets: ["00001", "00002", "829"],
+     *   raffleId: "yeuwjdbnd",
+     *   raffleTitle: "Sorteo de bici",
+     *   totalPrice: 30,
+     *   drawDate: "2025-12-20"
+     * }
+     */
+
+
+
+    console.log(data)
 
     return (
         <Html>
             <Head />
-            <Preview>{t('email_book_paid_1')} #{book_id.padStart(5, '0')} {t('email_book_paid_2')}</Preview>
+            <Preview>
+                Tu participación en “{raffleTitle}” ha sido confirmada 🎉
+            </Preview>
+
             <Tailwind>
                 <Body style={main}>
                     <Container style={container}>
                         <Section style={box}>
+                            {/* Logo */}
                             <Img
-                                src={`https://blog.tieneshueco.com/wp-content/uploads/2024/01/logo.png`}
-                                height="21"
-                                alt="Stripe"
+                                src={`https://www.piyango.es/logo 2.png`}
+                                height="24"
+                                alt="Piyango"
                             />
+
                             <Hr style={hr} />
-                            <Text className="text-gray-900 text-xl font-semibold">{t('email_book_paid_3')}</Text>
-                            <Text className="text-gray-500 font-light uppercase">{t('email_book_paid_4')} #{book_id.padStart(5, '0')}</Text>
-                            <Text style={paragraph}>
-                                {t('email_book_paid_5')}
+
+                            {/* Title */}
+                            <Text className="text-gray-900 text-xl font-semibold">
+                                ¡Boletos confirmados!
                             </Text>
-                            <Text style={paragraph}>
-                                {t('email_book_paid_6')}
+
+                            <Text className="text-gray-500 font-light uppercase">
+                                Rifa: {raffleTitle}
                             </Text>
-                            <Button style={button} href={process.env.BASE_URL + "/es/bookings/" + book_id}>
-                                {t('email_book_paid_7')}
+
+                            <Text style={paragraph}>
+                                Tu compra se ha realizado correctamente. Ya estás participando
+                                en la siguiente rifa:
+                            </Text>
+
+                            {/* Raffle info */}
+                            <Text style={paragraph} className="font-semibold">
+                                🎁 {raffleTitle}
+                            </Text>
+
+                            <Hr style={hr} />
+
+                            {/* Tickets */}
+                            <Text style={paragraph} className="font-semibold">
+                                🎟️ Tus boletos
+                            </Text>
+
+                            <Text style={paragraph}>
+                                {tickets.map((ticket) => (
+                                    <Text style={paragraph}>{ticket}</Text>
+                                ))}
+                            </Text>
+
+                            <Text style={paragraph}>
+                                💰 Total pagado:{" "}
+                                <span className="font-semibold">
+                                    {totalPrice} €
+                                </span>
+                            </Text>
+
+                            {/* CTA */}
+                            <Button
+                                style={button}
+                                href={`${process.env.BASE_URL}/raffles/${raffleId}`}
+                            >
+                                Ver rifa
                             </Button>
+
                             <Hr style={hr} />
 
-                            {
-                                booking.booking_bail != null && parseInt(booking.booking_bail?.bail_cost) > 0 &&
-                                <>
-                                    <Text style={paragraph}>
-                                        {t('email_book_paid_bail')}
-                                    </Text>
-
-                                    <Text style={paragraph} className="font-semibold">
-                                        {t('bail_information_title')}
-                                    </Text>
-
-                                    <Text style={paragraph}>
-                                        {t('bail_information_account')}: <span className="font-semibold">ES8600810200290004175825</span>
-                                    </Text>
-                                    <Text style={paragraph}>
-                                        {t('bail_information_qty')}: <span className="font-semibold">{parseFloat(booking.booking_bail.bail_cost).toLocaleString("de-DE", { minimumFractionDigits: 2 })} €</span>
-                                    </Text>
-                                    <Text style={paragraph}>
-                                        {t('bail_information_concept')}: <span className="font-semibold">{t('bail_information_concept_data').replace("{{value}}", `#${String(booking.id).padStart(5, "0")}`)}</span>
-                                    </Text>
-                                    <Text style={paragraph}>
-                                        {t('bail_information_benef')}: <span className="font-semibold">Tribu App Barcelona S.L</span>
-                                    </Text>
-
-                                    <Button style={button} href={process.env.BASE_URL + "/es/bookings/" + book_id + "?view=bail"}>
-                                        {t('email_book_paid_bail_cta')}
-                                    </Button>
-                                    <Hr style={hr} />
-                                </>
-                            }
-
-
+                            {/* Legal / Support */}
                             <Text style={paragraph}>
-                                {t('email_book_paid_10')} {" "}
-                                <Link
-                                    style={anchor}
-                                    href="mailto:info@tieneshueco.com"
-                                >
-                                    {t('email_book_paid_11')}
-                                </Link>{" "}
-                                {t('email_book_paid_12')}
-                            </Text>
-                            <Text style={paragraph}>
-                                {t('email_book_paid_13')}
+                                Guarda este correo como comprobante de tu participación.
                             </Text>
 
-                            <Text style={paragraph}>— {t('email_common_team')}</Text>
+                            <Text style={paragraph}>
+                                Si tienes cualquier duda, puedes escribirnos a{" "}
+                                <Link style={anchor} href="mailto:soporte@piyango.app">
+                                    hola@piyango.app
+                                </Link>
+                                .
+                            </Text>
+
+                            <Text style={paragraph}>
+                                ¡Mucha suerte! 🍀
+                            </Text>
+
+                            <Text style={paragraph}>— El equipo de Piyango</Text>
+
                             <Hr style={hr} />
+
                             <Text style={footer}>
-                                {t('email_common_address')}
+                                © {new Date().getFullYear()} Piyango · Todos los derechos reservados
                             </Text>
                         </Section>
                     </Container>
                 </Body>
             </Tailwind>
-        </Html>)
+        </Html>
+    );
 };
 
-export default StripeWelcomeEmail;
+export default PiyangoTicketPurchasedEmail;
