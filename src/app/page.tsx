@@ -16,7 +16,7 @@ export default function Home() {
       <HowItWorks />
       <FeaturedRaffles />
       <FAQ />
-      <Download />
+      {/* <Download /> */}
       <Footer />
     </>
   );
