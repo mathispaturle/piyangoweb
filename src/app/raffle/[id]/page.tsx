@@ -9,7 +9,7 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import Image from "next/image";
 import moment from 'moment';
-import { Check, CheckCheck, CheckCircle, Loader, Megaphone, Minus, Plus } from 'lucide-react';
+import { Check, CheckCheck, CheckCircle, Cross, Loader, Megaphone, Minus, Plus, X } from 'lucide-react';
 import ImageSlider from '../../components/ImageSlider';
 import useAuthUser from '@/lib/auth/useUserAuth';
 
@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/alert"
 
 import { AlertCircleIcon, CheckCircle2Icon, PopcornIcon } from "lucide-react"
+import { Button } from "@/components/ui/button";
 
 export default function RafflePage() {
   const params = useParams();
@@ -38,6 +39,8 @@ export default function RafflePage() {
   const [errorReserve, setErrorReserve] = useState<boolean>(false)
   const [success, setSuccess] = useState<boolean>(false)
   const [loadingbutton, setLoadingbutton] = useState<boolean>(false)
+  const [showSelectBallots, setShowSelectBallots] = useState<boolean>(true)
+
 
   useEffect(() => {
     if (!id || Array.isArray(id)) return; // ensure we have a single string id
@@ -120,6 +123,8 @@ export default function RafflePage() {
           uid: user.uid,
           raffleId: raffle.id,
           ticketAmount: ballotsNum,
+          email: user.email,
+          raffleTitle: raffle.title
         },
         // Optional: if you need to override CORS (rare when calling internal API)
         headers: {
@@ -250,43 +255,29 @@ export default function RafflePage() {
               <>
                 <div onClick={(e) => {
                   e.stopPropagation();
+                  // purchaseTickets();
+
+                  // return
                   console.log("Purchase button")
+                  setShowSelectBallots(true)
+                  // if (ballotsNum == 0) {
+                  //   return;
+                  // }
 
-                  if (ballotsNum == 0) {
-                    return;
-                  }
+                  // purchaseTickets()
 
-                  purchaseTickets()
+                }} className={`${ballotsNum == 0 ? 'bg-main/40 text-white/40' : 'bg-main text-white'} cursor-pointer flex justify-center items-center gap-2 mt-4 w-fullbg-main rounded-lg text-center md:w-full px-4 py-2 md:mt-4 font-semibold text-lg  disabled:cursor-not-allowed`}>
 
-                }} className={`${ballotsNum == 0 ? 'bg-main/40 text-white/40' : 'bg-main text-white'} cursor-pointer flex justify-between items-center gap-2 mt-4 w-fullbg-main rounded-lg text-center md:w-full px-4 py-2 md:mt-4 font-semibold text-lg  disabled:cursor-not-allowed`}>
-                  <button onClick={
-                    (e) => {
-                      e.stopPropagation();
-                      console.log(raffle.total_tickets)
-                      console.log(raffle.sold_tickets)
-                      if (ballotsNum == 0) return;
-                      else {
-                        setBallotsNum(ballotsNum - 1)
-                      }
-                    }
-                  } className="h-8 w-8 bg-white rounded-full flex justify-center items-center text-black">
-                    <Minus />
-                  </button>
 
                   <div className="flex justify-center items-center gap-3">
-                    <p>
-                      Reservar {ballotsNum > 0 && ballotsNum} boletos
+                    <p className="text-center">
+                      Reservar boletos
                     </p>
-                    {
-                      loadingbutton &&
-                      <Loader className="animate-spin" />
-
-                    }
                   </div>
 
 
 
-                  <button onClick={
+                  {/* <button onClick={
                     (e) => {
                       e.stopPropagation();
                       e.preventDefault();
@@ -299,9 +290,9 @@ export default function RafflePage() {
                     }
                   } className="h-8 w-8 bg-white rounded-full flex justify-center items-center text-black active:scale-95 transition-all duration-200">
                     <Plus />
-                  </button>
+                  </button> */}
                 </div>
-                <div className="hidden md:block mt-4 pt-4 border-t border-t-white w-full">
+                {/* <div className="hidden md:block mt-4 pt-4 border-t border-t-white w-full">
                   <div className="flex justify-between items-center">
                     <p className="text-sm text-white/70">Número de boletos</p>
                     <p className="text-sm font-medium">{ballotsNum.toFixed(2)}</p>
@@ -316,7 +307,7 @@ export default function RafflePage() {
                     <p className="text-sm text-white/70">Total</p>
                     <p className="text-sm font-medium">{(ballotsNum * (raffle.price_ticket ?? 0)).toFixed(2)} €</p>
                   </div>
-                </div>
+                </div> */}
 
                 {
                   errorReserve &&
@@ -356,6 +347,67 @@ export default function RafflePage() {
           </div>
         </>
       }
+
+      {/* SELECT BALLOTS POPUP */}
+      {showSelectBallots && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 flex items-center justify-center"
+          onClick={() => setShowSelectBallots(false)}
+        >
+          <div
+            className="bg-white rounded-xl w-80"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center p-4 border-b">
+              <p className="font-semibold">Reserva de boletos</p>
+              <button onClick={() => setShowSelectBallots(false)}>
+                <X />
+              </button>
+            </div>
+
+            <div className="p-6 flex items-center justify-between">
+              <button
+                onClick={() => setBallotsNum(Math.max(1, ballotsNum - 1))}
+                className="h-8 w-8 bg-white rounded-full flex justify-center items-center text-black active:scale-95 transition-all duration-200"
+              >
+                <Minus />
+              </button>
+
+              <span className="text-xl font-semibold">{ballotsNum}</span>
+
+              <button
+                onClick={() => setBallotsNum(ballotsNum + 1)}
+                className="h-8 w-8 bg-white rounded-full flex justify-center items-center text-black active:scale-95 transition-all duration-200"
+              >
+                <Plus />
+              </button>
+            </div>
+
+            <div className="p-4">
+              <Button className="w-full" onClick={purchaseTickets}>
+                Confirmar reserva
+              </Button>
+            </div>
+
+            <div className="hidden md:block mt-4 py-4 border-t border-t-neutral-200 w-full px-4">
+              <div className="flex justify-between items-center">
+                <p className="text-sm">Número de boletos</p>
+                <p className="text-sm font-medium">{ballotsNum.toFixed(2)}</p>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <p className="text-sm">Precio por boleto</p>
+                <p className="text-sm font-medium">{(raffle.price_ticket ?? 0).toFixed(2)} €</p>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <p className="text-sm">Total</p>
+                <p className="text-sm font-medium">{(ballotsNum * (raffle.price_ticket ?? 0)).toFixed(2)} €</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
 
       <Footer />

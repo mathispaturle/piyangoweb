@@ -69,7 +69,7 @@ export default function UserProfile() {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <p>Loading profile...</p>
-        <Loader2 className='animate-spin'/>
+        <Loader2 className='animate-spin' />
       </div>
     )
   }
@@ -80,7 +80,7 @@ export default function UserProfile() {
 
       <Card className="max-w-lg mx-auto p-6 shadow-lg rounded-2xl my-16">
         <CardHeader>
-          <CardTitle className="text-xl font-bold">User Profile</CardTitle>
+          <CardTitle className="text-xl font-bold">Perfil de usuario</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Avatar + Name */}
@@ -103,7 +103,7 @@ export default function UserProfile() {
           {editing ? (
             <div className="space-y-4">
               <div>
-                <Label htmlFor="fullname">Full Name</Label>
+                <Label htmlFor="fullname">Nombre completo</Label>
                 <Input
                   id="fullname"
                   name="fullname"
@@ -125,7 +125,7 @@ export default function UserProfile() {
               </div>
 
               <div>
-                <Label htmlFor="phone">Phone</Label>
+                <Label htmlFor="phone">Teléfono</Label>
                 <Input
                   id="phone"
                   name="phone"
@@ -136,7 +136,7 @@ export default function UserProfile() {
               </div>
 
               <div>
-                <Label htmlFor="birthdate">Birthdate</Label>
+                <Label htmlFor="birthdate">Fecha de nacimiento</Label>
                 <Input
                   id="birthdate"
                   type="date"
@@ -158,7 +158,7 @@ export default function UserProfile() {
                 />
               </div>
 
-              <div>
+              {/* <div>
                 <Label htmlFor="profile_pic">Profile Picture URL</Label>
                 <Input
                   id="profile_pic"
@@ -167,28 +167,28 @@ export default function UserProfile() {
                   onChange={handleChange}
                   className="mt-1"
                 />
-              </div>
+              </div> */}
 
               <Button onClick={handleSave} className="w-full">
-                Save
+                Guardar
               </Button>
             </div>
           ) : (
             <div className="space-y-4">
               <div>
-                <Label>Phone</Label>
+                <Label>Teléfono</Label>
                 <p className="text-sm mt-1">{profile.phone || "Not provided"}</p>
               </div>
               <div>
-                <Label>Birthdate</Label>
+                <Label>Fecha de nacimiento</Label>
                 <p className="text-sm mt-1">{profile.birthdate || "Not provided"}</p>
               </div>
               <div>
-                <Label>Bio</Label>
+                <Label>Sobre mi</Label>
                 <p className="text-sm mt-1">{profile.bio || "No bio provided"}</p>
               </div>
               <Button onClick={() => setEditing(true)} variant="outline" className="w-full">
-                Edit Profile
+                Editar Perfil
               </Button>
             </div>
           )}

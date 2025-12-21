@@ -31,33 +31,7 @@ export const ticketPurchasedSubject = (raffleTitle) => {
     return `🎟️ Confirmación de tus boletos – ${raffleTitle}`;
 };
 
-export const PiyangoTicketPurchasedEmail = async () => {
-
-    var raffleTitle = "Sortep de bici"
-    var raffleId = "yeuwjdbnd"
-    var tickets = ["00001", "00002", "829"]
-    var totalPrice = 30
-
-
-    const api_url = `${process.env.NEXT_PUBLIC_BASE_URL}/api/wallet/tickets?uid=YsM67FCOWIXpjDMGU7vEUhTYLMY2`;
-    console.log(api_url)
-    const res = await axios.get(api_url);
-    const data = await res.json();
-
-    /**
-     * data example:
-     * {
-     *   tickets: ["00001", "00002", "829"],
-     *   raffleId: "yeuwjdbnd",
-     *   raffleTitle: "Sorteo de bici",
-     *   totalPrice: 30,
-     *   drawDate: "2025-12-20"
-     * }
-     */
-
-
-
-    console.log(data)
+export const PiyangoTicketPurchasedEmail = async (raffleTitle, raffleId, tickets, totalPrice) => {
 
     return (
         <Html>
@@ -106,7 +80,7 @@ export const PiyangoTicketPurchasedEmail = async () => {
                             </Text>
 
                             <Text style={paragraph}>
-                                {tickets.map((ticket) => (
+                                {tickets.split(",").map((ticket) => (
                                     <Text style={paragraph}>{ticket}</Text>
                                 ))}
                             </Text>
@@ -114,7 +88,7 @@ export const PiyangoTicketPurchasedEmail = async () => {
                             <Text style={paragraph}>
                                 💰 Total pagado:{" "}
                                 <span className="font-semibold">
-                                    {totalPrice} €
+                                    {(totalPrice / 100).toLocaleString("de-DE", { minimumFractionDigits: 2 })} €
                                 </span>
                             </Text>
 

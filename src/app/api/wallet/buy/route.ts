@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { chargeWalletForTicket } from '@/lib/monei/utils';
+import axios from 'axios'
 
 export async function GET(req: NextRequest) {
   // CORS headers
@@ -20,6 +21,8 @@ export async function GET(req: NextRequest) {
     const uid = url.searchParams.get('uid');
     const raffleId = url.searchParams.get('raffleId');
     const ticketAmountStr = url.searchParams.get('ticketAmount');
+    const raffleTitle = url.searchParams.get('raffleTitle');
+    const email = url.searchParams.get('email');
     const ticketAmount = ticketAmountStr ? parseInt(ticketAmountStr, 10) : 0;
 
     if (
@@ -35,7 +38,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Call business logic
-    const result = await chargeWalletForTicket(uid, raffleId, ticketAmount);
+    const result: any = await chargeWalletForTicket(uid, raffleId, ticketAmount);
 
     // If insufficient funds
     if (!result.success && result.reason === 'INSUFFICIENT_FUNDS') {
@@ -63,6 +66,21 @@ export async function GET(req: NextRequest) {
         { status: 200, headers }
       );
     }
+
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+
+    const _url = `${baseUrl}/api/resend?email_type=raffle_paid&lang=es&email_to=${email}&tickets=${result.tickets.join(",")}&totalPrice=${result.totalCost}&raffleId=${raffleId}&raffleTitle=${raffleTitle}`;
+    await axios.post(_url, null, {
+      params: {
+        "email_type": "raffle_paid",
+        "lang": "es",
+        "email_to": email,
+        "tickets": result.tickets.join(","),
+        "totalPrice": result.totalCost,
+        "raffleId": raffleId,
+        "raffleTitle": raffleTitle
+      }
+    });
 
     // Success
     return new NextResponse(

@@ -34,13 +34,14 @@ async function GetEmailData(email_type, url, lang) {
 
     switch (email_type) {
         case "raffle_paid": {
-            // const book_id = url.searchParams.get("book_id")
-            // const user_token = url.searchParams.get("user_token")
 
+            const raffleTitle = url.searchParams.get("raffleTitle")
+            const raffleId = url.searchParams.get("raffleId")
+            const tickets = url.searchParams.get("tickets")
+            const totalPrice = url.searchParams.get("totalPrice")
 
-
-            let title = ticketPurchasedSubject("raffleTitle")
-            let email = await PiyangoTicketPurchasedEmail()
+            let title = ticketPurchasedSubject(raffleTitle)
+            let email = await PiyangoTicketPurchasedEmail(raffleTitle, raffleId, tickets, totalPrice)
 
             return {
                 subject: title,
