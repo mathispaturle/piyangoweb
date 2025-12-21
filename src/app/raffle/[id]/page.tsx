@@ -39,7 +39,7 @@ export default function RafflePage() {
   const [errorReserve, setErrorReserve] = useState<boolean>(false)
   const [success, setSuccess] = useState<boolean>(false)
   const [loadingbutton, setLoadingbutton] = useState<boolean>(false)
-  const [showSelectBallots, setShowSelectBallots] = useState<boolean>(true)
+  const [showSelectBallots, setShowSelectBallots] = useState<boolean>(false)
 
 
   useEffect(() => {
