@@ -164,7 +164,7 @@ export function SignupForm({
           <div className="flex gap-2">
             <Input
               id="repeatPassword"
-              type={showPassword ? 'text' : "password"}
+              type={repeatPassword ? 'text' : "password"}
               value={password}
               onChange={(e) => setRepeatPassword(e.target.value)}
               required
