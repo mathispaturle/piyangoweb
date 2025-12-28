@@ -19,7 +19,7 @@ export default function FAQ() {
     {
       question: "¿Qué pasa si no se venden todos los boletos?",
       answer:
-        "El sorteo se realiza igualmente en la fecha establecida, con todos los boletos vendidos hasta ese momento.",
+        "Si pasado 6 meses no se han vendido los boletos, el sorteo se considerará invalido y se procederá a la devolución del importe de los boletos reservados en el monedero del titular.",
     },
     {
       question: "¿Cómo se elige al ganador?",
