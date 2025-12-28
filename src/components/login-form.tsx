@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
+import { Eye, EyeClosed } from "lucide-react";
 
 export function LoginForm({
   className,
@@ -19,6 +20,7 @@ export function LoginForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [checkingSession, setCheckingSession] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
 
@@ -91,13 +93,25 @@ export function LoginForm({
               ¿Has olvidado tu contraseña?
             </a>
           </div>
-          <Input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="flex gap-2">
+            <Input
+              id="password"
+              type={showPassword ? 'text' : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <Button variant={'secondary'} onClick={(e) => {
+              e.preventDefault()
+              setShowPassword(!showPassword)
+            }}>
+              {
+                showPassword ? <EyeClosed /> : <Eye />
+              }
+
+            </Button>
+          </div>
+
         </div>
 
         {error && (

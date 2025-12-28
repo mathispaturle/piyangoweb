@@ -28,12 +28,12 @@ export default function TermsPage() {
         <ol className="list-decimal pl-6 mb-4">
           <li>Seleccionar la rifa o sorteo de interés.</li>
           <li>Adquirir uno o más boletos mediante los métodos de pago habilitados.</li>
-          <li>Esperar la fecha de celebración del sorteo o el agotamiento de boletos.</li>
+          <li>Esperar al agotamiento de boletos.</li>
         </ol>
 
         <h2 className="text-xl font-semibold mt-8 mb-3">4. Celebración del sorteo</h2>
         <p className="mb-4">
-          Los sorteos se celebrarán en la fecha indicada en la ficha del producto o al agotarse el número total de boletos. El sorteo se realizará mediante un sistema aleatorio certificado y el resultado será publicado en la web.
+          Los sorteos se celebrarán al agotarse el número total de boletos. El sorteo se realizará mediante un sistema aleatorio certificado y el resultado será publicado en la web.
         </p>
 
         <h2 className="text-xl font-semibold mt-8 mb-3">5. Premios</h2>
@@ -54,6 +54,11 @@ export default function TermsPage() {
         <h2 className="text-xl font-semibold mt-8 mb-3">8. Legislación aplicable</h2>
         <p className="mb-4">
           Estos términos se rigen por la legislación española. Cualquier disputa será resuelta por los juzgados y tribunales de Barcelona, salvo que la ley disponga otro fuero.
+        </p>
+
+        <h2 className="text-xl font-semibold mt-8 mb-3">9. Soporte</h2>
+        <p className="mb-4">
+          Todas las preguntas serán respondidas a través de soporte@piyango.es.
         </p>
 
         <p className="mt-10 text-sm text-gray-500">

@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu } from 'lucide-react';
+import { LogOut, Menu } from 'lucide-react';
 import useAuthUser from '../../lib/auth/useUserAuth';
 import {
   DropdownMenu,
@@ -18,6 +18,9 @@ import {
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar';
 import { profile } from 'console';
+import { Button } from "@/components/ui/button";
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 export default function Header() {
 
@@ -65,7 +68,7 @@ export default function Header() {
 
           {
             user ?
-              <div className='flex justify-end items-center gap-4 text-sm font-medium'>
+              <div className='hidden md:flex justify-end items-center gap-4 text-sm font-medium'>
                 <div className='flex items-end gap-0 flex-col'>
                   <p className='text-xs text-black font-semibold -mb-0.5'>{((userData?.wallet?.balanceCents ?? 0) / 100).toFixed(2)}€</p>
                   <Link href="/topup" className='text-xs text-main font-medium'>Ingresar</Link>
@@ -91,6 +94,14 @@ export default function Header() {
                     <DropdownMenuItem onClick={() => { router.push("/profile") }}>Perfil</DropdownMenuItem>
                     <DropdownMenuItem onClick={() => { router.push("/payments") }}>Pagos</DropdownMenuItem>
                     {/* <DropdownMenuItem>Ajustes</DropdownMenuItem> */}
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => {
+                      signOut(auth).then(() => {
+                        if (typeof window !== 'undefined') {
+                          window.location.reload()
+                        }
+                      })
+                    }}>Salir <LogOut /></DropdownMenuItem>
 
                     {/* <Fragment >
                     </Fragment> */}
@@ -123,15 +134,33 @@ export default function Header() {
                   <Link href={"/competitions"} className='text-sm font-medium'>
                     Competiciones abiertas
                   </Link>
-                  <Link href={"/winners"} className='text-sm font-medium'>
-                    Ganadores
+                  <Link href={"/tickets"} className='text-sm font-medium'>
+                    Mis boletos
                   </Link>
+                  <hr />
 
                   {
                     user ?
 
                       <>
-
+                        <Link href={"/profile"} className='text-sm font-medium'>
+                          Perfil
+                        </Link>
+                        <Link href={"/payments"} className='text-sm font-medium'>
+                          Pagos
+                        </Link>
+                        <Link href={"/topup"} className='text-sm font-medium'>
+                          Ingresar {" "}
+                          <span className='text-xs font-semibold -mb-0.5 text-main'>{((userData?.wallet?.balanceCents ?? 0) / 100).toFixed(2)}€</span>
+                        </Link>
+                        <hr />
+                        <Button variant={'destructive'} onClick={() => {
+                          signOut(auth).then(() => {
+                            if (typeof window !== 'undefined') {
+                              window.location.reload()
+                            }
+                          })
+                        }}>Salir <LogOut /></Button>
                       </>
 
                       : <>

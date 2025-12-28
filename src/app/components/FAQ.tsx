@@ -9,7 +9,7 @@ export default function FAQ() {
     {
       question: "¿Cómo funciona Piyango?",
       answer:
-        "Piyango organiza rifas con un número limitado de boletos, por ejemplo 2.000, a un precio fijo. Compras uno o varios boletos, y cuando se venden todos o llega la fecha límite, hacemos el sorteo y entregamos el premio al ganador.",
+        "Piyango organiza rifas con un número limitado de boletos, por ejemplo 2.000, a un precio fijo. Compras uno o varios boletos, y cuando se venden todos, hacemos el sorteo y entregamos el premio al ganador.",
     },
     {
       question: "¿Por qué tengo más probabilidades de ganar aquí?",
@@ -44,12 +44,12 @@ export default function FAQ() {
     {
       question: "¿Qué métodos de pago aceptan?",
       answer:
-        "Tarjeta de crédito/débito, PayPal y otros métodos locales dependiendo de tu país.",
+        "Tarjeta de crédito/débito, PayPal y otros métodos locales de España.",
     },
     {
       question: "¿Puedo participar desde cualquier país?",
       answer:
-        "En general sí, pero algunos premios pueden tener restricciones de envío según tu ubicación. Esto se indicará en la página de la rifa.",
+        "No. Solo es posible participar desde España.",
     },
   ];
 

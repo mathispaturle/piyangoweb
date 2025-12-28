@@ -10,12 +10,12 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
 
 
-export default function TopupPage(){
+export default function TopupPage() {
 
   const [topup, setTopup] = useState<number>(5);
   const [loading, setLoading] = useState<boolean>(false);
   const [uid, setUid] = useState<string | null>(null);
-  
+
   const router = useRouter()
 
   // Detectar si ya hay sesión activa
@@ -27,7 +27,7 @@ export default function TopupPage(){
     });
     return () => unsubscribe();
   }, [router]);
-  
+
   // const handleTopup = async () => {
   //   setLoading(true);
 
@@ -78,7 +78,7 @@ export default function TopupPage(){
   };
 
 
-  return(
+  return (
     <>
       <Header />
       <div className='pb-32 bg-gray-50'>
@@ -95,20 +95,20 @@ export default function TopupPage(){
             <div className='mt-6'>
               <div>
                 <p className='font-medium text-gray-500'>Elige la cantidad a recargar</p>
-                <div className='mt-3 flex justify-start items-center gap-2'>
-                  <button onClick={()=>{setTopup(5)}} className={`w-full px-12 py-8 cursor-pointer font-semibold text-xl border ${topup == 5 ? 'border-main outline outline-main': 'border-neutral-200'} whitespace-nowrap rounded-2xl`}>
+                <div className='mt-3 flex md:flex-row flex-col justify-start items-center gap-2'>
+                  <button onClick={() => { setTopup(5) }} className={`w-full px-12 py-8 cursor-pointer font-semibold text-xl border ${topup == 5 ? 'border-main outline outline-main' : 'border-neutral-200'} whitespace-nowrap rounded-2xl`}>
                     5 €
                   </button>
-                  <button onClick={()=>{setTopup(10)}} className={`w-full px-12 py-8 cursor-pointer font-semibold text-xl border ${topup == 10 ? 'border-main outline outline-main': 'border-neutral-200'} whitespace-nowrap rounded-2xl`}>
+                  <button onClick={() => { setTopup(10) }} className={`w-full px-12 py-8 cursor-pointer font-semibold text-xl border ${topup == 10 ? 'border-main outline outline-main' : 'border-neutral-200'} whitespace-nowrap rounded-2xl`}>
                     10 €
                   </button>
-                  <button onClick={()=>{setTopup(15)}} className={`w-full px-12 py-8 cursor-pointer font-semibold text-xl border ${topup == 15 ? 'border-main outline outline-main': 'border-neutral-200'} whitespace-nowrap rounded-2xl`}>
+                  <button onClick={() => { setTopup(15) }} className={`w-full px-12 py-8 cursor-pointer font-semibold text-xl border ${topup == 15 ? 'border-main outline outline-main' : 'border-neutral-200'} whitespace-nowrap rounded-2xl`}>
                     15 €
                   </button>
-                  <button onClick={()=>{setTopup(20)}} className={`w-full px-12 py-8 cursor-pointer font-semibold text-xl border ${topup == 20 ? 'border-main outline outline-main': 'border-neutral-200'} whitespace-nowrap rounded-2xl`}>
+                  <button onClick={() => { setTopup(20) }} className={`w-full px-12 py-8 cursor-pointer font-semibold text-xl border ${topup == 20 ? 'border-main outline outline-main' : 'border-neutral-200'} whitespace-nowrap rounded-2xl`}>
                     20 €
                   </button>
-                  <button onClick={()=>{setTopup(25)}} className={`w-full px-12 py-8 cursor-pointer font-semibold text-xl border ${topup == 25 ? 'border-main outline outline-main': 'border-neutral-200'} whitespace-nowrap rounded-2xl`}>
+                  <button onClick={() => { setTopup(25) }} className={`w-full px-12 py-8 cursor-pointer font-semibold text-xl border ${topup == 25 ? 'border-main outline outline-main' : 'border-neutral-200'} whitespace-nowrap rounded-2xl`}>
                     25 €
                   </button>
                 </div>
@@ -120,9 +120,9 @@ export default function TopupPage(){
                 }
               </button>
             </div>
-            </div>
-            </section>
           </div>
+        </section>
+      </div>
       <Footer />
     </>
   )

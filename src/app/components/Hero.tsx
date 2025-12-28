@@ -29,7 +29,7 @@ export default function Hero() {
       <div className='relative max-w-screen-xl p-4 py-[24vh] mx-auto w-full text-white  grid md:grid-cols-1 items-center'>
         <div className='md:py-8 items-center'>
           <h1 className='text-4xl md:text-8xl font-bold '>Rediseñamos la suerte</h1>
-          <p className='text-4xl mt-3'>Participa y gana de manera justa y con más posibilidades que nunca.</p>
+          <p className='text-lg md:text-4xl mt-3'>Participa y gana de manera justa y con más posibilidades que nunca.</p>
 
           <div className='flex justify-start items-center gap-4 mt-6'>
             {/* <Link href={"/https://apps.apple.com/us/app/piyango-app/id6751572358"} target="_blank" className='relative'>

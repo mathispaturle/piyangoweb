@@ -14,6 +14,7 @@ import {
 import { doc, setDoc, getDocs, collection, query, where } from "firebase/firestore";
 import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
+import { Eye, EyeClosed } from "lucide-react";
 
 export function SignupForm({
   className,
@@ -28,6 +29,7 @@ export function SignupForm({
 
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [showPassword, setShowPassword] = useState(false);
 
   // Si el registro viene de un link con ?ref=xxxx
   const referrer_id = searchParams.get("ref") || null;
@@ -138,23 +140,45 @@ export function SignupForm({
         </div>
         <div className="grid gap-3">
           <Label htmlFor="password">Contraseña</Label>
-          <Input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="flex gap-2">
+            <Input
+              id="password"
+              type={showPassword ? 'text' : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <Button variant={'secondary'} onClick={(e) => {
+              e.preventDefault()
+              setShowPassword(!showPassword)
+            }}>
+              {
+                showPassword ? <EyeClosed /> : <Eye />
+              }
+
+            </Button>
+          </div>
         </div>
         <div className="grid gap-3">
           <Label htmlFor="repeatPassword">Repite contraseña</Label>
-          <Input
-            id="repeatPassword"
-            type="password"
-            value={repeatPassword}
-            onChange={(e) => setRepeatPassword(e.target.value)}
-            required
-          />
+          <div className="flex gap-2">
+            <Input
+              id="repeatPassword"
+              type={showPassword ? 'text' : "password"}
+              value={password}
+              onChange={(e) => setRepeatPassword(e.target.value)}
+              required
+            />
+            <Button variant={'secondary'} onClick={(e) => {
+              e.preventDefault()
+              setShowPassword(!showPassword)
+            }}>
+              {
+                showPassword ? <EyeClosed /> : <Eye />
+              }
+
+            </Button>
+          </div>
         </div>
 
         {error && (
