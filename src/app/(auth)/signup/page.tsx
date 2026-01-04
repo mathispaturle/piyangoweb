@@ -1,23 +1,9 @@
-'use client'
 
 import Link from 'next/link'
 import Image from 'next/image'
 import { SignupForm } from '../../../components/signup-form'
-import { Suspense, useEffect, useState } from 'react'
-
-import { useSearchParams } from 'next/navigation'
-
+import { Suspense } from 'react'
 export default function LoginPage() {
-
-  const params = useSearchParams();
-
-  const [raffleId, setRaffleId] = useState<string>()
-
-  useEffect(() => {
-    setRaffleId(params.get("r") ?? "")
-  }, [])
-
-
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -37,7 +23,7 @@ export default function LoginPage() {
             <Suspense fallback={
               <div>Cargando formulario...</div>
             }>
-              <SignupForm itemID={raffleId} />
+              <SignupForm />
             </Suspense>
 
           </div>

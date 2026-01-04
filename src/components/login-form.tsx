@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeClosed } from "lucide-react";
 
 export function LoginForm({
@@ -24,12 +24,20 @@ export function LoginForm({
 
   const router = useRouter();
 
+  const params = useSearchParams();
+
+  const [raffleId, setRaffleId] = useState<string>()
+
+  useEffect(() => {
+    setRaffleId(params.get("r") ?? "")
+  }, [])
+
   // Detectar si ya hay sesión activa
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        if (props.itemID != "") {
-          router.push(`/raffle/${props.itemID}`); // Redirige a rifa si ya logeado
+        if (raffleId != "") {
+          router.push(`/raffle/${raffleId}`); // Redirige a rifa si ya logeado
         }
         else {
           router.push("/"); // Redirige si ya logeado
@@ -48,8 +56,8 @@ export function LoginForm({
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      if (props.itemID != "") {
-        router.push(`/raffle/${props.itemID}`); // Redirige a rifa si ya logeado
+      if (raffleId != "") {
+        router.push(`/raffle/${raffleId}`); // Redirige a rifa si ya logeado
       }
       else {
         router.push("/"); // Redirige si ya logeado
@@ -134,7 +142,7 @@ export function LoginForm({
       </div>
       <div className="text-center text-sm">
         ¿No tienes cuenta?{" "}
-        <Link href={`/signup${props.itemID != "" ? `?r=${props.itemID}` : ""}`} className="underline underline-offset-4">
+        <Link href={`/signup${raffleId != "" ? `?r=${raffleId}` : ""}`} className="underline underline-offset-4">
           Crea tu cuenta
         </Link>
       </div>

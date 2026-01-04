@@ -1,4 +1,4 @@
-'use client'
+
 
 import { GalleryVerticalEnd } from "lucide-react"
 
@@ -6,18 +6,8 @@ import { LoginForm } from "@/components/login-form"
 import Link from 'next/link'
 import Image from 'next/image'
 
-import { Suspense, useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
 
 export default function LoginPage() {
-
-  const params = useSearchParams();
-
-  const [raffleId, setRaffleId] = useState<string>()
-
-  useEffect(() => {
-    setRaffleId(params.get("r") ?? "")
-  }, [])
 
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
@@ -35,7 +25,7 @@ export default function LoginPage() {
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            <LoginForm itemID={raffleId} />
+            <LoginForm />
           </div>
         </div>
       </div>
