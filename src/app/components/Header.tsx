@@ -36,7 +36,17 @@ export default function Header() {
       {
         showBanner && (
           <div className="bg-black text-white p-2 font-semibold text-center text-sm">
-            Nuevos sorteos cada semana! <Link href={"/signup"} className="underline">Únete a Piyango</Link>
+            {
+              (user && userData?.fullname) ?
+
+                <>
+                  ¡Hola {userData.fullname.split(" ")[0]}!
+                </>
+                :
+                <>
+                  Nuevos sorteos cada semana! <Link href={"/signup"} className="underline">Únete a Piyango</Link>
+                </>
+            }
           </div>
         )
       }
