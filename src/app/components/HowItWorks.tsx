@@ -8,25 +8,25 @@ export default function HowItWorks() {
       icon: ShoppingCart,
       title: "Elige tu premio",
       description:
-        "Explora nuestras rifas y selecciona el premio que quieres ganar.",
+        "Explora nuestras rifas y selecciona el premio que deseas ganar",
     },
     {
       icon: Ticket,
       title: "Compra tu boleto",
       description:
-        "Consigue tu boleto por desde solo 2 €. Menos boletos, más probabilidades.",
+        "Consigue tu boleto desde solo 2€",
     },
     {
       icon: Clock,
       title: "Espera el sorteo",
       description:
-        "Cuando se vendan todos los boletos o acabe el tiempo, la rifa se cierra.",
+        "Cuando se vendan todos los boletos, la rifa se celebra",
     },
     {
       icon: Trophy,
       title: "Gana y celebra",
       description:
-        "Elegimos al ganador en vivo y enviamos el premio directamente a tu puerta.",
+        "La rifa se celebra en vivo, ante notario",
     },
   ];
 

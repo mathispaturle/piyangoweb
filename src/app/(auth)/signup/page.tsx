@@ -1,14 +1,28 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { SignupForm } from '../../../components/signup-form'
-import { Suspense } from 'react'
+import { Suspense, useEffect, useState } from 'react'
+
+import { useSearchParams } from 'next/navigation'
 
 export default function LoginPage() {
+
+  const params = useSearchParams();
+
+  const [raffleId, setRaffleId] = useState<string>()
+
+  useEffect(() => {
+    setRaffleId(params.get("r") ?? "")
+  }, [])
+
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex justify-center gap-2 md:justify-start">
-           <Link href={'/'}>
+          <Link href={'/'}>
             <Image
               src="/logo.svg"
               alt="Pyango Logo"
@@ -23,7 +37,7 @@ export default function LoginPage() {
             <Suspense fallback={
               <div>Cargando formulario...</div>
             }>
-              <SignupForm />
+              <SignupForm itemID={raffleId} />
             </Suspense>
 
           </div>

@@ -16,6 +16,7 @@ import useAuthUser from '@/lib/auth/useUserAuth';
 import Link from 'next/link';
 import { Raffle } from "@/types/raffle";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 import {
   Alert,
@@ -40,6 +41,8 @@ export default function RafflePage() {
   const [success, setSuccess] = useState<boolean>(false)
   const [loadingbutton, setLoadingbutton] = useState<boolean>(false)
   const [showSelectBallots, setShowSelectBallots] = useState<boolean>(false)
+
+  const router = useRouter()
 
 
   useEffect(() => {
@@ -105,6 +108,10 @@ export default function RafflePage() {
   if (!raffle) return <p className="text-center py-12">Raffle not found</p>;
 
   const purchaseTickets = async () => {
+
+    if (loadingbutton) {
+      return
+    }
 
     setErrorReserve(false)
     setLoadingbutton(true)
@@ -255,16 +262,12 @@ export default function RafflePage() {
               <>
                 <div onClick={(e) => {
                   e.stopPropagation();
-                  // purchaseTickets();
+                  if (!user) {
+                    router.push(`/signup?r=${raffle.id}`)
+                    return
+                  }
 
-                  // return
-                  console.log("Purchase button")
                   setShowSelectBallots(true)
-                  // if (ballotsNum == 0) {
-                  //   return;
-                  // }
-
-                  // purchaseTickets()
 
                 }} className={`${ballotsNum == 0 ? 'bg-main/40 text-white/40' : 'bg-main text-white'} cursor-pointer flex justify-center items-center gap-2 mt-4 w-fullbg-main rounded-lg text-center md:w-full px-4 py-2 md:mt-4 font-semibold text-lg  disabled:cursor-not-allowed`}>
 
@@ -274,56 +277,9 @@ export default function RafflePage() {
                       Reservar boletos
                     </p>
                   </div>
-
-
-
-                  {/* <button onClick={
-                    (e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      console.log(raffle.total_tickets)
-                      console.log(raffle.sold_tickets)
-                      if (ballotsNum < (raffle.total_tickets - (raffle.sold_tickets ?? 0))) {
-                        var num = ballotsNum + 1;
-                        setBallotsNum(num)
-                      }
-                    }
-                  } className="h-8 w-8 bg-white rounded-full flex justify-center items-center text-black active:scale-95 transition-all duration-200">
-                    <Plus />
-                  </button> */}
                 </div>
-                {/* <div className="hidden md:block mt-4 pt-4 border-t border-t-white w-full">
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm text-white/70">Número de boletos</p>
-                    <p className="text-sm font-medium">{ballotsNum.toFixed(2)}</p>
-                  </div>
 
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm text-white/70">Precio por boleto</p>
-                    <p className="text-sm font-medium">{(raffle.price_ticket ?? 0).toFixed(2)} €</p>
-                  </div>
 
-                  <div className="flex justify-between items-center">
-                    <p className="text-sm text-white/70">Total</p>
-                    <p className="text-sm font-medium">{(ballotsNum * (raffle.price_ticket ?? 0)).toFixed(2)} €</p>
-                  </div>
-                </div> */}
-
-                {
-                  errorReserve &&
-                  <Alert variant="destructive" className="mt-4">
-                    <AlertCircleIcon />
-                    <AlertTitle>No ha sido posible reservar el boleto.</AlertTitle>
-                    <AlertDescription>
-                      <p>Por favor asegúrate de tener suficiente saldo para poder reservar el boleto.</p>
-                      <ul className="list-inside list-disc text-sm">
-                        <li>Revisa tu cuenta</li>
-                        <li>Recarga tu monedero virtual</li>
-                        <li>Reserva tu boleto</li>
-                      </ul>
-                    </AlertDescription>
-                  </Alert>
-                }
               </>
           }
 
@@ -351,11 +307,11 @@ export default function RafflePage() {
       {/* SELECT BALLOTS POPUP */}
       {showSelectBallots && (
         <div
-          className="fixed inset-0 z-40 bg-black/40 flex items-center justify-center"
+          className="fixed inset-0 z-40 bg-black/40 flex items-center justify-center "
           onClick={() => setShowSelectBallots(false)}
         >
           <div
-            className="bg-white rounded-xl w-80"
+            className="bg-white rounded-xl min-w-96"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center p-4 border-b">
@@ -384,10 +340,34 @@ export default function RafflePage() {
             </div>
 
             <div className="p-4">
-              <Button className="w-full" onClick={purchaseTickets}>
+              <Button className={`w-full ${loadingbutton ? 'opacity-80' : ''}`} onClick={purchaseTickets}>
                 Confirmar reserva
+                {
+                  loadingbutton &&
+                  <Loader className="animate-spin" />
+                }
               </Button>
             </div>
+
+            {
+              errorReserve &&
+              <div className="mt-4 mx-4">
+
+                <Alert variant="destructive" >
+                  <AlertCircleIcon />
+                  <AlertTitle>No ha sido posible reservar el boleto.</AlertTitle>
+                  <AlertDescription>
+                    <p>Por favor asegúrate de tener suficiente saldo para poder reservar el boleto.</p>
+                    <ul className="list-inside list-disc text-sm">
+                      <li>Revisa tu cuenta</li>
+                      <li>Recarga tu monedero virtual</li>
+                      <li>Reserva tu boleto</li>
+                    </ul>
+                  </AlertDescription>
+                </Alert>
+              </div>
+
+            }
 
             <div className="hidden md:block mt-4 py-4 border-t border-t-neutral-200 w-full px-4">
               <div className="flex justify-between items-center">

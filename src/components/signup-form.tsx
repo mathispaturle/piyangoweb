@@ -38,7 +38,12 @@ export function SignupForm({
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        router.push("/"); // Redirige si ya logeado
+        if (props.itemID != "") {
+          router.push(`/raffle/${props.itemID}`); // Redirige a rifa si ya logeado
+        }
+        else {
+          router.push("/"); // Redirige si ya logeado
+        }
       } else {
         setCheckingSession(false);
       }
@@ -97,7 +102,12 @@ export function SignupForm({
         "email_to": user.email
       })
 
-      router.push("/");
+      if (props.itemID != "") {
+        router.push(`/raffle/${props.itemID}`); // Redirige a rifa si ya logeado
+      }
+      else {
+        router.push("/"); // Redirige si ya logeado
+      }
     } catch (err: any) {
       console.error(err);
       setError("Error al crear la cuenta. Inténtalo de nuevo.");
@@ -191,7 +201,7 @@ export function SignupForm({
       </div>
       <div className="text-center text-sm">
         ¿Ya tienes cuenta?{" "}
-        <Link href={"/login"} className="underline underline-offset-4">
+        <Link href={`/login${props.itemID != "" ? `?r=${props.itemID}` : ""}`} className="underline underline-offset-4">
           Accede a tu cuenta
         </Link>
       </div>

@@ -28,7 +28,12 @@ export function LoginForm({
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        router.push("/"); // redirige a home si ya está logueado
+        if (props.itemID != "") {
+          router.push(`/raffle/${props.itemID}`); // Redirige a rifa si ya logeado
+        }
+        else {
+          router.push("/"); // Redirige si ya logeado
+        }
       } else {
         setCheckingSession(false);
       }
@@ -43,7 +48,12 @@ export function LoginForm({
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("/"); // o donde quieras enviarlo tras login
+      if (props.itemID != "") {
+        router.push(`/raffle/${props.itemID}`); // Redirige a rifa si ya logeado
+      }
+      else {
+        router.push("/"); // Redirige si ya logeado
+      }
     } catch (err: any) {
       setError("Credenciales incorrectas o error en el inicio de sesión");
     } finally {
@@ -124,7 +134,7 @@ export function LoginForm({
       </div>
       <div className="text-center text-sm">
         ¿No tienes cuenta?{" "}
-        <Link href={"/signup"} className="underline underline-offset-4">
+        <Link href={`/signup${props.itemID != "" ? `?r=${props.itemID}` : ""}`} className="underline underline-offset-4">
           Crea tu cuenta
         </Link>
       </div>

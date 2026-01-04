@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useAuthUser from "@/lib/auth/useUserAuth";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { useRouter } from "next/navigation";
 
 type TicketData = {
     raffleId: string;
@@ -22,10 +23,11 @@ export default function TicketsScreen() {
     const [activeView, setActiveView] = useState<string>("");
     const [loading, setLoading] = useState(true);
 
+    const router = useRouter()
+
     const fetchTickets = async () => {
         if (!user) {
-
-
+            // router.push(`/signup`)
             return
         };
 
@@ -82,10 +84,9 @@ export default function TicketsScreen() {
                                                 <div
                                                     key={index}
                                                     className="bg-white rounded-xl p-4 flex gap-4 items-start cursor-pointer border border-gray-200 hover:bg-gray-50 transition"
-                                                    onClick={() =>
-                                                        setActiveView((prev) =>
-                                                            prev === data.raffleId ? "" : data.raffleId
-                                                        )
+                                                    onClick={() => {
+                                                        router.push(`/raffle/${data.raffleId}`)
+                                                    }
                                                     }
                                                 >
                                                     <div className="w-20 h-20 min-w-20 rounded-xl overflow-hidden bg-gray-100">
