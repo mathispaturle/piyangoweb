@@ -55,6 +55,9 @@ export default function RafflePage() {
 
         if (raffleSnap.exists()) {
           setRaffle({ id: raffleSnap.id, ...raffleSnap.data() } as Raffle);
+
+          const r = raffleSnap.data()
+          console.log(r.description)
         } else {
           console.error("No such raffle!");
         }
@@ -69,6 +72,7 @@ export default function RafflePage() {
   }, [id]);
 
   useEffect(() => {
+
 
     if ((raffle?.total_tickets ?? 0) - (raffle?.sold_tickets ?? 0) > 0) {
       setBallotsNum(1)
@@ -160,6 +164,7 @@ export default function RafflePage() {
     }
   }
 
+
   return (
     <>
       <Header />
@@ -183,7 +188,7 @@ export default function RafflePage() {
 
 
           <p className="font-semibold mt-8">Descripción</p>
-          <p className="text-lg text-gray-600 mt-2 max-w-2xl">{raffle.description}</p>
+          <p className="text-lg text-gray-600 mt-2 max-w-2xl whitespace-break-spaces">{raffle.description}</p>
 
 
 
@@ -194,7 +199,7 @@ export default function RafflePage() {
 
               <div className="flex justify-start items-stretch gap-4">
                 <div className="p-4 flex flex-col border border-gray-100 rounded-md bg-white">
-                  <p className="text-sm text-gray-600">Tickets</p>
+                  <p className="text-sm text-gray-600">Tickets totales</p>
                   <p className="text-semibold">{raffle.total_tickets}</p>
                 </div>
 
@@ -230,7 +235,11 @@ export default function RafflePage() {
                   <span className="text-gray-600 col-span-3">{String(value)}</span>
                 </div>
               ))}
+
+
           </div>
+          <p className="text-sm text-gray-600">Las imágenes podrían no coincidir con el premio final.</p>
+
 
         </div>
         <div className="w-full md:w-1/3 md:min-w-1/3 md:max-w-1/3 fixed bottom-2 left-2 right-2 md:sticky md:top-24 p-4 rounded-xl bg-black text-white flex flex-col justify-between md:flex-col items-stretch md:items-start">
