@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import TopupPage from './success/page';
+import TopupModule from './topupModule';
 
 export default function TopupProcessingPage() {
   return (
@@ -7,7 +7,7 @@ export default function TopupProcessingPage() {
     <Suspense fallback={
       <div>Cargando modulo...</div>
     }>
-      <TopupPage />
+      <TopupModule />
     </Suspense>
   )
 }
