@@ -19,6 +19,7 @@ export default function ProcessingModule() {
 
   const paymentId = searchParams.get('id')
   const orderId = searchParams.get('orderId')
+  const raffleId = searchParams.get('r') ?? null
 
   // Keep polling until payment is final
   useEffect(() => {
@@ -83,7 +84,7 @@ export default function ProcessingModule() {
                   ✅ Recarga completada
                 </h2>
                 <p className="text-gray-600 mb-8">Tu pago ha sido aprobado.</p>
-                <Link href="/competitions" className='mt-8 px-5 py-2 bg-black rounded-md text-white font-semibold text-sm cursor-pointer'>Continuar</Link>
+                <Link href={raffleId ? `/raffle/${raffleId}` : `/competitions`} className='mt-8 px-5 py-2 bg-black rounded-md text-white font-semibold text-sm cursor-pointer'>Continuar</Link>
               </>
             ) : status === 'FAILED' || status === 'CANCELED' ? (
               <>

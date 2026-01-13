@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation'
 import { setTimeout } from 'timers';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
@@ -17,7 +17,9 @@ export default function TopupPage() {
   const [uid, setUid] = useState<string | null>(null);
 
   const router = useRouter()
+  const searchParams = useSearchParams()
 
+  const raffleId = searchParams.get('r') ?? null
   // Detectar si ya hay sesión activa
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -59,7 +61,7 @@ export default function TopupPage() {
     try {
       setLoading(true);
 
-      const url = "/api/wallet/topup" + (uid ? `?uid=${uid}&amount=${topup * 100}` : '');
+      const url = "/api/wallet/topup" + (uid ? `?uid=${uid}&amount=${topup * 100}&r=${raffleId}` : '');
 
       const res = await fetch(url, {
         method: "GET",

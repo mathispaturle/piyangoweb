@@ -24,8 +24,9 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const uid = searchParams.get('uid') || '';
   const amount = parseInt(searchParams.get('amount') || '0', 10);
+  const rid = searchParams.get('r') || '';
 
-  return await handlePayment(uid, amount);
+  return await handlePayment(uid, amount, rid);
   // } catch (e: any) {
   //   console.error(e);
   //   return NextResponse.json(
@@ -35,7 +36,7 @@ export async function GET(req: NextRequest) {
   // }
 }
 
-async function handlePayment(uid: string, amount: number) {
+async function handlePayment(uid: string, amount: number, rid: string) {
   if (!uid || !Number.isInteger(amount) || amount <= 0) {
     return NextResponse.json(
       { error: 'Parámetros inválidos' },
@@ -50,8 +51,8 @@ async function handlePayment(uid: string, amount: number) {
     currency: 'EUR',
     orderId,
     description: `Top-up monedero Piyango`,
-    completeUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/topup/processing`,
-    cancelUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/topup`,
+    completeUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/topup/processing?r=${rid}`,
+    cancelUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/topup?r=${rid}`,
     metadata: { uid },
   };
 

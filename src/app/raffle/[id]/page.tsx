@@ -28,6 +28,7 @@ import { AlertCircleIcon, CheckCircle2Icon, PopcornIcon } from "lucide-react"
 import { Button } from "@/components/ui/button";
 
 export default function RafflePage() {
+
   const params = useParams();
   const { id } = params as { id?: string | string[] };
   const { user, userData, loading } = useAuthUser();
@@ -41,6 +42,7 @@ export default function RafflePage() {
   const [success, setSuccess] = useState<boolean>(false)
   const [loadingbutton, setLoadingbutton] = useState<boolean>(false)
   const [showSelectBallots, setShowSelectBallots] = useState<boolean>(false)
+  const [needsRecharge, setNeedsRecharge] = useState<boolean>(false)
 
   const router = useRouter()
 
@@ -117,6 +119,11 @@ export default function RafflePage() {
       return
     }
 
+    if (needsRecharge) {
+      router.push(`/topup?r=${raffle.id}`)
+      return
+    }
+
     setErrorReserve(false)
     setLoadingbutton(true)
 
@@ -161,6 +168,24 @@ export default function RafflePage() {
         error: "REQUEST_FAILED",
         details: error.message,
       };
+    }
+  }
+
+  const precheckBalance = (e: any) => {
+    e.stopPropagation();
+    if (!user) {
+      router.push(`/signup?r=${raffle.id}`)
+      return
+    }
+
+    setShowSelectBallots(true)
+  }
+
+  const checkBalanceIsOk = (num: number) => {
+    if (num > (userData?.wallet?.balanceCents ?? 0) / 100) {
+      setNeedsRecharge(true)
+    } else {
+      setNeedsRecharge(false)
     }
   }
 
@@ -269,16 +294,7 @@ export default function RafflePage() {
               <div className='bg-main rounded-lg text-center text-white md:w-full px-4 py-2 md:mt-4 font-semibold text-lg'>Próximamente</div>
               :
               <>
-                <div onClick={(e) => {
-                  e.stopPropagation();
-                  if (!user) {
-                    router.push(`/signup?r=${raffle.id}`)
-                    return
-                  }
-
-                  setShowSelectBallots(true)
-
-                }} className={`${ballotsNum == 0 ? 'bg-main/40 text-white/40' : 'bg-main text-white'} cursor-pointer flex justify-center items-center gap-2 mt-4 w-fullbg-main rounded-lg text-center md:w-full px-4 py-2 md:mt-4 font-semibold text-lg  disabled:cursor-not-allowed`}>
+                <div onClick={precheckBalance} className={`${ballotsNum == 0 ? 'bg-main/40 text-white/40' : 'bg-main text-white'} cursor-pointer flex justify-center items-center gap-2 mt-4 w-fullbg-main rounded-lg text-center md:w-full px-4 py-2 md:mt-4 font-semibold text-lg  disabled:cursor-not-allowed`}>
 
 
                   <div className="flex justify-center items-center gap-3">
@@ -332,7 +348,10 @@ export default function RafflePage() {
 
             <div className="p-6 flex items-center justify-between">
               <button
-                onClick={() => setBallotsNum(Math.max(1, ballotsNum - 1))}
+                onClick={() => {
+                  checkBalanceIsOk(Math.max(1, ballotsNum - 1) * (raffle.price_ticket ?? 0))
+                  setBallotsNum(Math.max(1, ballotsNum - 1))
+                }}
                 className="h-8 w-8 bg-white rounded-full flex justify-center items-center text-black active:scale-95 transition-all duration-200"
               >
                 <Minus />
@@ -341,7 +360,10 @@ export default function RafflePage() {
               <span className="text-xl font-semibold">{ballotsNum}</span>
 
               <button
-                onClick={() => setBallotsNum(ballotsNum + 1)}
+                onClick={() => {
+                  checkBalanceIsOk((ballotsNum + 1) * (raffle.price_ticket ?? 0))
+                  setBallotsNum(ballotsNum + 1)
+                }}
                 className="h-8 w-8 bg-white rounded-full flex justify-center items-center text-black active:scale-95 transition-all duration-200"
               >
                 <Plus />
@@ -350,7 +372,7 @@ export default function RafflePage() {
 
             <div className="p-4">
               <Button className={`w-full ${loadingbutton ? 'opacity-80' : ''}`} onClick={purchaseTickets}>
-                Confirmar reserva
+                {needsRecharge ? <>Recargar monedero</> : <>Confirmar reserva</>}
                 {
                   loadingbutton &&
                   <Loader className="animate-spin" />
