@@ -60,6 +60,7 @@ export default function RafflePage() {
 
           const r = raffleSnap.data()
           console.log(r.description)
+
         } else {
           console.error("No such raffle!");
         }
@@ -75,6 +76,7 @@ export default function RafflePage() {
 
   useEffect(() => {
 
+    checkBalanceIsOk((raffle?.price_ticket ?? 0))
 
     if ((raffle?.total_tickets ?? 0) - (raffle?.sold_tickets ?? 0) > 0) {
       setBallotsNum(1)
