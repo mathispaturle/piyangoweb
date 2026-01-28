@@ -68,7 +68,7 @@ async function handlePayment(uid: string, amount: number, rid: string) {
   });
 }
 
-export const shortHash = (input: string) => {
+const shortHash = (input: string) => {
   return Buffer.from(input)
     .toString('base64')
     .replace(/[^a-zA-Z0-9]/g, '')

@@ -1,7 +1,6 @@
 // src/app/api/monei/payment/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { Monei } from '@monei-js/node-sdk';
-import { shortHash } from '../../wallet/topup/route';
 import { doc, setDoc, serverTimestamp, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { Raffle } from '@/types/raffle';
@@ -105,4 +104,11 @@ async function handlePayment(uid: string, amount: number, rid: string, raffleTit
     args,
     redirectUrl: payment.nextAction?.redirectUrl,
   };
+}
+
+const shortHash = (input: string) => {
+  return Buffer.from(input)
+    .toString('base64')
+    .replace(/[^a-zA-Z0-9]/g, '')
+    .slice(0, 8);
 }
