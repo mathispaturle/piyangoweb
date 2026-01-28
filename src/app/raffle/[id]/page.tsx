@@ -59,7 +59,6 @@ export default function RafflePage() {
           setRaffle({ id: raffleSnap.id, ...raffleSnap.data() } as Raffle);
 
           const r = raffleSnap.data()
-          console.log(r.description)
 
         } else {
           console.error("No such raffle!");
@@ -114,19 +113,25 @@ export default function RafflePage() {
   if (loadingRaffle) return <p className="text-center py-12">loadingRaffle...</p>;
   if (!raffle) return <p className="text-center py-12">Raffle not found</p>;
 
-  const purchaseTickets = async () => {
+  const purchaseTickets = async (mode: number) => {
+
+    // Modes:
+    // 0 => proceed to buy: there are enough funds
+    // 1 => go to monedero recarga
+    // 2 => direct buy, prepare passarela
 
     if (loadingbutton) {
       return
     }
 
-    if (needsRecharge) {
-      router.push(`/topup?r=${raffle.id}`)
-      return
-    }
-
     setErrorReserve(false)
     setLoadingbutton(true)
+
+    if (mode == 1)
+      if (needsRecharge) {
+        router.push(`/topup?r=${raffle.id}`)
+        return
+      }
 
     if (!user) {
       if (typeof window !== 'undefined') {
@@ -134,6 +139,41 @@ export default function RafflePage() {
       }
       setLoadingbutton(false)
       return;
+    }
+
+    if (mode == 2) {
+      try {
+        const res = await axios.get("/api/monei/buy", {
+          params: {
+            uid: user.uid,
+            raffleId: raffle.id,
+            ticketAmount: ballotsNum,
+            email: user.email,
+            raffleTitle: raffle.title
+          },
+          // Optional: if you need to override CORS (rare when calling internal API)
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+
+        router.push(res.data.redirectUrl)
+
+        // if (!res.data.success) {
+        //   // Display error
+        //   setErrorReserve(true)
+        //   setLoadingbutton(false)
+        //   return
+        // }
+
+        // setSuccess(true)
+        // setLoadingbutton(false)
+
+        return res.data;
+      } catch (error) {
+        console.log(error)
+      }
+      return
     }
 
     try {
@@ -375,13 +415,20 @@ export default function RafflePage() {
             </div>
 
             <div className="p-4">
-              <Button className={`w-full ${loadingbutton ? 'opacity-80' : ''}`} onClick={purchaseTickets}>
-                {needsRecharge ? <>Recargar monedero</> : <>Confirmar reserva</>}
+              <Button className={`w-full ${loadingbutton ? 'opacity-80' : ''}`} onClick={() => { purchaseTickets(needsRecharge ? 2 : 0) }}>
+                {needsRecharge ? <>Comprar</> : <>Confirmar reserva</>}
                 {
                   loadingbutton &&
                   <Loader className="animate-spin" />
                 }
               </Button>
+
+              {
+                needsRecharge &&
+                <Button variant={'outline'} className={`w-full mt-2 ${loadingbutton ? 'opacity-80' : ''}`} onClick={() => { purchaseTickets(1) }}>
+                  Recargar monedero
+                </Button>
+              }
             </div>
 
             {

@@ -27,13 +27,6 @@ export async function GET(req: NextRequest) {
   const rid = searchParams.get('r') || '';
 
   return await handlePayment(uid, amount, rid);
-  // } catch (e: any) {
-  //   console.error(e);
-  //   return NextResponse.json(
-  //     { error: 'No se pudo procesar GET' },
-  //     { status: 500 }
-  //   );
-  // }
 }
 
 async function handlePayment(uid: string, amount: number, rid: string) {
@@ -75,7 +68,7 @@ async function handlePayment(uid: string, amount: number, rid: string) {
   });
 }
 
-function shortHash(input: string) {
+export function shortHash(input: string) {
   return Buffer.from(input)
     .toString('base64')
     .replace(/[^a-zA-Z0-9]/g, '')

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { chargeWalletForTicket } from '@/lib/monei/utils';
 import axios from 'axios'
+import { checkResponseStatus } from '../../common';
 
 export async function GET(req: NextRequest) {
   // CORS headers
@@ -39,58 +40,14 @@ export async function GET(req: NextRequest) {
 
     // Call business logic
     const result: any = await chargeWalletForTicket(uid, raffleId, ticketAmount);
-
-    // If insufficient funds
-    if (!result.success && result.reason === 'INSUFFICIENT_FUNDS') {
-      return new NextResponse(
-        JSON.stringify({
-          success: false,
-          reason: 'INSUFFICIENT_FUNDS',
-          message: 'Not enough balance to buy tickets',
-        }),
-        { status: 200, headers }
-      );
-    }
-
-    // If any other handled business failure
-    if (!result.success) {
-      return new NextResponse(
-        JSON.stringify({
-          success: false,
-          reason: result.reason || 'UNKNOWN',
-          message:
-            'message' in result && typeof (result as any).message === 'string'
-              ? (result as any).message
-              : 'Transaction failed',
-        }),
-        { status: 200, headers }
-      );
-    }
-
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
-
-    const _url = `${baseUrl}/api/resend?email_type=raffle_paid&lang=es&email_to=${email}&tickets=${result.tickets.join(",")}&totalPrice=${result.totalCost}&raffleId=${raffleId}&raffleTitle=${raffleTitle}`;
-    await axios.post(_url, null, {
-      params: {
-        "email_type": "raffle_paid",
-        "lang": "es",
-        "email_to": email,
-        "tickets": result.tickets.join(","),
-        "totalPrice": result.totalCost,
-        "raffleId": raffleId,
-        "raffleTitle": raffleTitle
-      }
-    });
+    const status = await checkResponseStatus(result, email, raffleId, raffleTitle)
 
     // Success
-    return new NextResponse(
-      JSON.stringify({
-        success: true,
-        message: 'Transaction successful',
-        response: result,
-      }),
+    return new NextResponse(status,
       { status: 200, headers }
     );
+
+
   } catch (e: any) {
     console.error('Buy endpoint error:', e);
     return new NextResponse(
